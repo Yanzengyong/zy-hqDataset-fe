@@ -35,7 +35,8 @@ const datasetMatchesCategory = (dataset, category) => {
     return true
   }
 
-  return normalizeText(dataset.category) === normalizedCategory
+  return normalizeText(dataset.groupId) === normalizedCategory
+    || normalizeText(dataset.category) === normalizedCategory
     || dataset.tags.some((tag) => normalizeText(tag) === normalizedCategory)
 }
 
