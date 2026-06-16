@@ -49,13 +49,13 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="dataset-search" aria-label="数据集检索">
-    <div class="dataset-search__tabs" role="tablist" aria-label="数据集列表切换">
-      <button class="is-active" type="button" role="tab" aria-selected="true">
+    <div class="dataset-search__segments" aria-label="数据集列表类型">
+      <span class="is-active">
         数据集列表
-      </button>
-      <button type="button" role="tab" aria-selected="false">
+      </span>
+      <span>
         数据集建设意向列表
-      </button>
+      </span>
     </div>
 
     <form class="dataset-search__row" @submit.prevent="$emit('search')">
@@ -74,7 +74,13 @@ onBeforeUnmount(() => {
         搜索
       </button>
 
-      <button class="dataset-search__advanced" type="button">
+      <button
+        class="dataset-search__advanced"
+        type="button"
+        disabled
+        aria-disabled="true"
+        title="演示环境暂未开放高级检索"
+      >
         <SlidersHorizontal :size="16" aria-hidden="true" />
         高级检索
       </button>
@@ -113,14 +119,14 @@ onBeforeUnmount(() => {
   gap: 14px;
 }
 
-.dataset-search__tabs {
+.dataset-search__segments {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
   border-bottom: 1px solid var(--color-border);
 }
 
-.dataset-search__tabs button {
+.dataset-search__segments span {
   min-width: 0;
   min-height: 38px;
   padding: 8px 13px;
@@ -131,7 +137,7 @@ onBeforeUnmount(() => {
   line-height: 1.4;
 }
 
-.dataset-search__tabs button.is-active {
+.dataset-search__segments span.is-active {
   border-bottom-color: var(--color-blue);
   color: var(--color-blue-deep);
 }
@@ -215,6 +221,13 @@ onBeforeUnmount(() => {
 
 .dataset-search__advanced {
   padding: 0 12px;
+}
+
+.dataset-search__advanced:disabled {
+  cursor: not-allowed;
+  color: #8b98a6;
+  background: #f4f7fa;
+  opacity: 0.72;
 }
 
 .dataset-search__sort {
