@@ -75,11 +75,14 @@ const navItems = computed(() => [
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: 0;
+  overflow-wrap: anywhere;
 }
 
 .app-header__nav {
   display: flex;
   flex: 0 1 auto;
+  min-width: 0;
+  max-width: 100%;
   align-items: center;
   justify-content: center;
   gap: 4px;
@@ -90,6 +93,7 @@ const navItems = computed(() => [
 }
 
 .app-header__nav a {
+  min-width: 0;
   white-space: nowrap;
   padding: 7px 12px;
   border-radius: 6px;
@@ -126,6 +130,7 @@ const navItems = computed(() => [
   }
 
   .app-header__brand {
+    flex: 0 1 auto;
     min-width: 0;
   }
 
@@ -144,8 +149,12 @@ const navItems = computed(() => [
     width: min(var(--layout-width), calc(100% - 24px));
   }
 
+  .app-header__nav {
+    width: 100%;
+  }
+
   .app-header__nav a {
-    flex: 1 1 auto;
+    flex: 1 1 88px;
     text-align: center;
   }
 }

@@ -122,12 +122,14 @@ defineEmits({
 
 .filter-sidebar__group-title {
   width: 100%;
+  min-width: 0;
   padding: 8px 10px;
   color: var(--color-ink-soft);
   font-size: 14px;
   font-weight: 700;
   line-height: 1.4;
   text-align: left;
+  overflow-wrap: anywhere;
 }
 
 .filter-sidebar__tags {
@@ -137,11 +139,13 @@ defineEmits({
 }
 
 .filter-sidebar__tag {
+  min-width: 0;
   padding: 5px 9px;
   color: var(--color-muted);
   font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
+  overflow-wrap: anywhere;
   box-shadow: 0 4px 10px rgba(24, 36, 51, 0.04);
 }
 

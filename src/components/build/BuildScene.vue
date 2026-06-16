@@ -504,5 +504,13 @@ onUnmounted(() => {
   .build-scene__pulse {
     width: 54%;
   }
+
+  .build-scene__keywords {
+    inset: 14px;
+  }
+
+  .build-scene__keywords span {
+    font-size: 11px;
+  }
 }
 </style>

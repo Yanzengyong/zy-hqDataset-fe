@@ -252,6 +252,7 @@ const downloadDataset = async () => {
 }
 
 .dataset-summary__download {
+  min-width: 0;
   gap: 7px;
   padding: 0 13px;
   color: #ffffff;
@@ -340,6 +341,10 @@ const downloadDataset = async () => {
 @media (max-width: 520px) {
   .dataset-summary h1 {
     font-size: 22px;
+  }
+
+  .dataset-summary__download {
+    white-space: normal;
   }
 
   .dataset-summary__metrics {

@@ -216,6 +216,10 @@ onUnmounted(() => {
     border-radius: 8px;
   }
 
+  .build-view__summary {
+    font-size: 13px;
+  }
+
   .build-view__title {
     font-size: 24px;
   }

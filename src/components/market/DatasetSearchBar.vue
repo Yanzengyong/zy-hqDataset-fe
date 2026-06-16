@@ -121,6 +121,7 @@ onBeforeUnmount(() => {
 }
 
 .dataset-search__tabs button {
+  min-width: 0;
   min-height: 38px;
   padding: 8px 13px;
   border-bottom: 2px solid transparent;
@@ -140,6 +141,7 @@ onBeforeUnmount(() => {
   grid-template-columns: minmax(240px, 1fr) auto auto minmax(136px, auto) auto;
   gap: 10px;
   align-items: center;
+  min-width: 0;
 }
 
 .dataset-search__input {
@@ -174,6 +176,7 @@ onBeforeUnmount(() => {
 .dataset-search__advanced,
 .dataset-search__sort {
   display: inline-flex;
+  min-width: 0;
   min-height: 40px;
   align-items: center;
   justify-content: center;
@@ -270,6 +273,7 @@ onBeforeUnmount(() => {
   .dataset-search__advanced,
   .dataset-search__sort {
     width: 100%;
+    white-space: normal;
   }
 
   .dataset-search__sort {
