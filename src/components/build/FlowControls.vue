@@ -31,21 +31,24 @@ defineEmits(['toggle-play', 'select-stage'])
       <span>{{ isPlaying ? '暂停流转' : '播放流转' }}</span>
     </button>
 
-    <div class="flow-controls__stages" role="list">
-      <button
+    <ul class="flow-controls__stages">
+      <li
         v-for="(stage, index) in stages"
         :key="stage.id"
-        class="flow-controls__stage"
-        :class="{ 'flow-controls__stage--active': stage.id === activeStageId }"
-        type="button"
-        role="listitem"
-        :aria-current="stage.id === activeStageId ? 'step' : undefined"
-        @click="$emit('select-stage', stage.id)"
+        class="flow-controls__stage-item"
       >
-        <span class="flow-controls__index">{{ String(index + 1).padStart(2, '0') }}</span>
-        <span class="flow-controls__name">{{ stage.title }}</span>
-      </button>
-    </div>
+        <button
+          class="flow-controls__stage"
+          :class="{ 'flow-controls__stage--active': stage.id === activeStageId }"
+          type="button"
+          :aria-current="stage.id === activeStageId ? 'step' : undefined"
+          @click="$emit('select-stage', stage.id)"
+        >
+          <span class="flow-controls__index">{{ String(index + 1).padStart(2, '0') }}</span>
+          <span class="flow-controls__name">{{ stage.title }}</span>
+        </button>
+      </li>
+    </ul>
   </nav>
 </template>
 
@@ -97,6 +100,14 @@ defineEmits(['toggle-play', 'select-stage'])
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.flow-controls__stage-item {
+  display: flex;
+  min-width: 0;
 }
 
 .flow-controls__stage {
@@ -106,6 +117,7 @@ defineEmits(['toggle-play', 'select-stage'])
   min-height: 46px;
   align-items: center;
   min-width: 0;
+  width: 100%;
   padding: 8px 10px;
   text-align: left;
 }

@@ -330,7 +330,7 @@ onUnmounted(() => {
 .build-scene {
   min-height: 480px;
   border: 1px solid rgba(169, 216, 216, 0.18);
-  border-radius: 10px;
+  border-radius: 8px;
   background:
     radial-gradient(circle at 50% 48%, rgba(139, 214, 196, 0.22), transparent 26%),
     linear-gradient(180deg, rgba(8, 22, 28, 0.32), rgba(8, 22, 28, 0.74));
@@ -344,7 +344,7 @@ onUnmounted(() => {
   overflow: hidden;
   min-height: 480px;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 8px;
 }
 
 .build-scene__canvas {

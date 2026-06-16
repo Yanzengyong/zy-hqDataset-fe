@@ -121,14 +121,12 @@ onUnmounted(() => {
   overflow: hidden;
   min-height: calc(100vh - 132px);
   padding: 24px;
-  border: 1px solid rgba(165, 200, 215, 0.16);
-  border-radius: 12px;
+  border-radius: 8px;
   color: #edf7f6;
   background:
     radial-gradient(circle at 22% 12%, rgba(31, 138, 112, 0.24), transparent 32%),
     radial-gradient(circle at 76% 0%, rgba(47, 111, 187, 0.22), transparent 30%),
     linear-gradient(135deg, #071116 0%, #0b1722 47%, #10131b 100%);
-  box-shadow: 0 22px 56px rgba(7, 17, 22, 0.28);
 }
 
 .build-view::before {
@@ -215,7 +213,7 @@ onUnmounted(() => {
   .build-view {
     min-height: calc(100vh - 96px);
     padding: 16px;
-    border-radius: 10px;
+    border-radius: 8px;
   }
 
   .build-view__title {
