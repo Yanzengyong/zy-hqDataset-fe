@@ -6,7 +6,7 @@ import AppHeader from './components/layout/AppHeader.vue'
 <template>
   <div class="app-shell">
     <AppHeader />
-    <main class="app-main">
+    <main class="app-main" aria-label="应用内容">
       <RouterView />
     </main>
   </div>
