@@ -45,11 +45,7 @@ const openDetail = () => {
 <template>
   <article
     class="dataset-card"
-    tabindex="0"
-    role="link"
-    :aria-label="`查看${dataset.name}`"
     @click="openDetail"
-    @keydown.enter.prevent="openDetail"
   >
     <div class="dataset-card__logo" aria-hidden="true">
       {{ dataset.logoText }}
@@ -71,6 +67,8 @@ const openDetail = () => {
           :aria-pressed="dataset.isFavorite"
           :aria-label="dataset.isFavorite ? '取消收藏' : '收藏数据集'"
           @click.stop="$emit('toggle-favorite', dataset.id)"
+          @keydown.enter.stop
+          @keydown.space.stop
         >
           <Heart :size="17" :fill="dataset.isFavorite ? 'currentColor' : 'none'" aria-hidden="true" />
         </button>

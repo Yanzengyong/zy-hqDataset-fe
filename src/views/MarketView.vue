@@ -69,18 +69,8 @@ const toggleDatasetFavorite = async (id) => {
 }
 
 onMounted(async () => {
-  loading.value = true
-
-  try {
-    const [categories] = await Promise.all([
-      getMarketCategories(),
-      loadDatasets(),
-    ])
-
-    marketCategories.value = categories
-  } finally {
-    loading.value = false
-  }
+  marketCategories.value = await getMarketCategories()
+  await loadDatasets()
 })
 
 watch([keyword, activeCategory, sort], () => {
