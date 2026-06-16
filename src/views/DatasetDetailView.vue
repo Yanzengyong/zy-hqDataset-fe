@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Download, FileText } from 'lucide-vue-next'
 import EmptyState from '../components/common/EmptyState.vue'
@@ -24,6 +24,7 @@ const loading = ref(true)
 const documentDownloading = ref(false)
 const documentDownloadLabel = ref('下载规范文档')
 let requestId = 0
+let documentDownloadRequestId = 0
 let documentDownloadTimer = 0
 
 const breadcrumbItems = computed(() => [
@@ -42,13 +43,21 @@ const breadcrumbItems = computed(() => [
 
 const currentDatasetId = computed(() => String(route.params.id ?? ''))
 
+const resetDocumentDownloadState = () => {
+  documentDownloadRequestId += 1
+  globalThis.clearTimeout(documentDownloadTimer)
+  documentDownloadTimer = 0
+  documentDownloading.value = false
+  documentDownloadLabel.value = '下载规范文档'
+}
+
 const loadDatasetDetail = async () => {
   const currentRequestId = requestId + 1
   requestId = currentRequestId
   loading.value = true
   dataset.value = null
   relatedDatasets.value = []
-  documentDownloadLabel.value = '下载规范文档'
+  resetDocumentDownloadState()
 
   const [detail, related] = await Promise.all([
     getDatasetDetail(currentDatasetId.value),
@@ -82,13 +91,34 @@ const downloadDocument = async () => {
   documentDownloading.value = true
   documentDownloadLabel.value = '正在创建任务'
 
-  const result = await simulateDownload(dataset.value.id)
+  const datasetId = dataset.value.id
+  const currentDocumentDownloadRequestId = documentDownloadRequestId + 1
+  documentDownloadRequestId = currentDocumentDownloadRequestId
+
+  const result = await simulateDownload(datasetId)
+
+  if (
+    currentDocumentDownloadRequestId !== documentDownloadRequestId ||
+    dataset.value?.id !== datasetId ||
+    result.id !== datasetId
+  ) {
+    return
+  }
+
   documentDownloadLabel.value = result.status === 'success' ? '文档下载已创建' : '下载失败'
   documentDownloading.value = false
 
   globalThis.clearTimeout(documentDownloadTimer)
   documentDownloadTimer = globalThis.setTimeout(() => {
+    if (
+      currentDocumentDownloadRequestId !== documentDownloadRequestId ||
+      dataset.value?.id !== datasetId
+    ) {
+      return
+    }
+
     documentDownloadLabel.value = '下载规范文档'
+    documentDownloadTimer = 0
   }, 1600)
 }
 
@@ -98,6 +128,10 @@ onMounted(() => {
 
 watch(currentDatasetId, () => {
   loadDatasetDetail()
+})
+
+onUnmounted(() => {
+  resetDocumentDownloadState()
 })
 </script>
 
