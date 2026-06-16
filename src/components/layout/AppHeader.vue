@@ -1,3 +1,28 @@
+<script setup>
+import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const navItems = computed(() => [
+  {
+    label: '首页',
+    to: '/',
+    isActive: route.path === '/',
+  },
+  {
+    label: '数据集构建',
+    to: '/build',
+    isActive: route.path.startsWith('/build'),
+  },
+  {
+    label: '数据集超市',
+    to: '/market',
+    isActive: route.path.startsWith('/market'),
+  },
+])
+</script>
+
 <template>
   <header class="app-header">
     <div class="app-header__inner">
@@ -6,9 +31,14 @@
       </RouterLink>
 
       <nav class="app-header__nav" aria-label="主导航">
-        <RouterLink to="/">首页</RouterLink>
-        <RouterLink to="/build">数据集构建</RouterLink>
-        <RouterLink to="/market">数据集超市</RouterLink>
+        <RouterLink
+          v-for="item in navItems"
+          :key="item.to"
+          :class="{ 'is-active': item.isActive }"
+          :to="item.to"
+        >
+          {{ item.label }}
+        </RouterLink>
       </nav>
 
       <span class="app-header__status">中医药数据资产演示</span>
@@ -69,7 +99,7 @@
 }
 
 .app-header__nav a:hover,
-.app-header__nav a.router-link-active {
+.app-header__nav a.is-active {
   color: var(--color-blue-deep);
   background: #ffffff;
   box-shadow: inset 0 0 0 1px rgba(39, 92, 160, 0.08);

@@ -12,7 +12,7 @@ defineProps({
     <ol>
       <li v-for="(item, index) in items" :key="`${item.label}-${index}`">
         <RouterLink v-if="item.to" :to="item.to">{{ item.label }}</RouterLink>
-        <span v-else>{{ item.label }}</span>
+        <span v-else aria-current="page">{{ item.label }}</span>
       </li>
     </ol>
   </nav>
