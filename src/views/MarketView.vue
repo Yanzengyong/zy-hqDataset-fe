@@ -141,7 +141,32 @@ watch([keyword, activeCategory, sort], () => {
 .market-view {
   display: grid;
   gap: 18px;
-  min-height: calc(100vh - 132px);
+  min-height: calc(100vh - 80px - 48px);
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
+}
+
+.market-view::-webkit-scrollbar {
+  width: 6px;
+}
+
+.market-view::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.market-view::-webkit-scrollbar-thumb {
+  background-color: rgba(39, 92, 160, 0.3);
+  border-radius: 3px;
+}
+
+.market-view::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(39, 92, 160, 0.55);
+}
+
+.market-view::-webkit-scrollbar-thumb:active {
+  background-color: rgba(39, 92, 160, 0.75);
 }
 
 .market-view__header {
@@ -193,7 +218,7 @@ watch([keyword, activeCategory, sort], () => {
 
 .market-view__sidebar {
   position: sticky;
-  top: 84px;
+  top: 16px;
 }
 
 .market-view__content {
@@ -240,7 +265,7 @@ watch([keyword, activeCategory, sort], () => {
 
 @media (max-width: 640px) {
   .market-view {
-    min-height: calc(100vh - 96px);
+    min-height: calc(100vh - 80px - 32px);
   }
 
   .market-view__heading,

@@ -132,3 +132,26 @@ export const simulateDownload = async (id) => {
     message: '下载任务已创建',
   }
 }
+
+export const getDatasetsByCategory = async (category) => {
+  await delay()
+  
+  const categoryMap = {
+    herb: (dataset) => 
+      dataset.tags.some(tag => ['药材图像', '本草'].includes(tag)) ||
+      (dataset.category === '医学影像' && dataset.domain.includes('药材')),
+    
+    classic: (dataset) =>
+      dataset.tags.some(tag => ['经典名方', '方剂'].includes(tag)) ||
+      dataset.domain.includes('方剂学'),
+    
+    clinical: (dataset) =>
+      dataset.category === '临床数据' ||
+      dataset.tags.some(tag => ['病案', '随访'].includes(tag))
+  }
+  
+  const filterFn = categoryMap[category]
+  if (!filterFn) return []
+  
+  return clone(datasets.filter(filterFn))
+}
