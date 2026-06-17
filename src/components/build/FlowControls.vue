@@ -1,5 +1,5 @@
 <script setup>
-import { Pause, Play } from 'lucide-vue-next'
+import { Play, Sparkles } from 'lucide-vue-next'
 
 defineProps({
   stages: {
@@ -10,27 +10,17 @@ defineProps({
     type: String,
     default: '',
   },
-  isPlaying: {
+  isGoverning: {
     type: Boolean,
     default: false,
   },
 })
 
-defineEmits(['toggle-play', 'select-stage'])
+defineEmits(['start-governance', 'select-stage'])
 </script>
 
 <template>
   <nav class="flow-controls" aria-label="构建流程控制">
-    <button
-      class="flow-controls__play"
-      type="button"
-      :aria-pressed="isPlaying"
-      @click="$emit('toggle-play')"
-    >
-      <component :is="isPlaying ? Pause : Play" :size="18" :stroke-width="2" aria-hidden="true" />
-      <span>{{ isPlaying ? '暂停流转' : '播放流转' }}</span>
-    </button>
-
     <ul class="flow-controls__stages">
       <li
         v-for="(stage, index) in stages"
@@ -48,6 +38,20 @@ defineEmits(['toggle-play', 'select-stage'])
           <span class="flow-controls__name">{{ stage.title }}</span>
         </button>
       </li>
+
+      <li class="flow-controls__stage-item">
+        <button
+          class="flow-controls__start"
+          :class="{ 'flow-controls__start--running': isGoverning }"
+          type="button"
+          :disabled="isGoverning"
+          :aria-busy="isGoverning"
+          @click="$emit('start-governance')"
+        >
+          <component :is="isGoverning ? Sparkles : Play" :size="17" :stroke-width="2" aria-hidden="true" />
+          <span>{{ isGoverning ? '治理中' : '启动' }}</span>
+        </button>
+      </li>
     </ul>
   </nav>
 </template>
@@ -56,15 +60,11 @@ defineEmits(['toggle-play', 'select-stage'])
 .flow-controls {
   position: relative;
   z-index: 1;
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  gap: 12px;
-  align-items: stretch;
   margin-top: 16px;
 }
 
-.flow-controls__play,
-.flow-controls__stage {
+.flow-controls__stage,
+.flow-controls__start {
   border: 1px solid rgba(169, 216, 216, 0.18);
   border-radius: 8px;
   color: rgba(237, 247, 246, 0.76);
@@ -76,28 +76,16 @@ defineEmits(['toggle-play', 'select-stage'])
     transform 0.18s ease;
 }
 
-.flow-controls__play:hover,
-.flow-controls__stage:hover {
+.flow-controls__stage:hover,
+.flow-controls__start:not(:disabled):hover {
   transform: translateY(-1px);
   border-color: rgba(139, 214, 196, 0.48);
   color: #ffffff;
 }
 
-.flow-controls__play {
-  display: inline-flex;
-  min-height: 46px;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 0 16px;
-  font-size: 14px;
-  font-weight: 700;
-  white-space: nowrap;
-}
-
 .flow-controls__stages {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr)) minmax(112px, 0.64fr);
   gap: 8px;
   min-width: 0;
   margin: 0;
@@ -120,6 +108,27 @@ defineEmits(['toggle-play', 'select-stage'])
   width: 100%;
   padding: 8px 10px;
   text-align: left;
+}
+
+.flow-controls__start {
+  display: inline-flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.flow-controls__start--running {
+  border-color: rgba(183, 127, 33, 0.58);
+  color: #ffe7ad;
+  background:
+    linear-gradient(135deg, rgba(183, 127, 33, 0.24), rgba(31, 138, 112, 0.14)),
+    rgba(8, 22, 28, 0.78);
 }
 
 .flow-controls__stage--active {
@@ -149,8 +158,8 @@ defineEmits(['toggle-play', 'select-stage'])
 }
 
 @media (max-width: 980px) {
-  .flow-controls {
-    grid-template-columns: 1fr;
+  .flow-controls__stages {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
