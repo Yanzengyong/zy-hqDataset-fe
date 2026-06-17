@@ -209,7 +209,7 @@ watch(activeTab, loadDatasets)
 }
 
 .content-product__panel {
-  min-height: 200px;
+  min-height: 1120px;
   padding: 32px;
   border: 1px solid var(--color-border);
   border-radius: 12px;
@@ -233,6 +233,7 @@ watch(activeTab, loadDatasets)
   }
   
   .content-product__panel {
+    min-height: 900px;
     padding: 16px;
   }
 }
