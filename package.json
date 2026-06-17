@@ -5,10 +5,11 @@
     "preview": "vite preview --host 0.0.0.0"
   },
   "dependencies": {
-    "vue": "3.5.38",
-    "vue-router": "4.6.4",
+    "gsap": "^3.15.0",
+    "lucide-vue-next": "1.0.0",
     "three": "0.184.0",
-    "lucide-vue-next": "1.0.0"
+    "vue": "3.5.38",
+    "vue-router": "4.6.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "5.2.4",

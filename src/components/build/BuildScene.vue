@@ -1,5 +1,17 @@
 <script setup>
-defineProps({
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
+import { gsap } from 'gsap'
+import tcmHerbsImage from '../../assets/annotation/tcm-herbs.png'
+import tcmPrescriptionImage from '../../assets/annotation/tcm-prescription.png'
+import tcmPulseImage from '../../assets/annotation/tcm-pulse.png'
+
+const annotationImages = [
+  { src: tcmHerbsImage, alt: '中药材标注样本' },
+  { src: tcmPulseImage, alt: '脉诊标注样本' },
+  { src: tcmPrescriptionImage, alt: '处方标注样本' },
+]
+
+const props = defineProps({
   stages: {
     type: Array,
     default: () => [],
@@ -15,6 +27,224 @@ defineProps({
 })
 
 defineEmits(['select-stage'])
+
+const sourceVisual = ref(null)
+const qualityVisual = ref(null)
+let sourceTimeline = null
+let qualityTimeline = null
+let qualitySlotOrder = []
+let qualitySlotCursor = 0
+
+const qualitySlots = [
+  { left: 34, top: 34 },
+  { left: 66, top: 34 },
+  { left: 36, top: 66 },
+  { left: 66, top: 66 },
+]
+
+const setSourceVisual = (element) => {
+  if (element) {
+    sourceVisual.value = element
+  }
+}
+
+const setQualityVisual = (element) => {
+  if (element) {
+    qualityVisual.value = element
+  }
+}
+
+const resetSourceFlights = () => {
+  sourceTimeline?.kill()
+  sourceTimeline = null
+
+  if (!sourceVisual.value) {
+    return
+  }
+
+  gsap.set(sourceVisual.value.querySelectorAll('.pipeline-source-flight'), {
+    clearProps: 'transform',
+    opacity: 0,
+    scale: 1,
+  })
+}
+
+const resetQualityWords = () => {
+  qualityTimeline?.kill()
+  qualityTimeline = null
+  qualitySlotOrder = []
+  qualitySlotCursor = 0
+
+  if (!qualityVisual.value) {
+    return
+  }
+
+  gsap.set(qualityVisual.value.querySelectorAll('i'), {
+    opacity: 0,
+    filter: 'blur(1.6px)',
+    left: '50%',
+    top: '50%',
+    xPercent: -50,
+    yPercent: -50,
+    scale: 0.92,
+    x: 0,
+    y: 0,
+  })
+}
+
+const shuffleQualitySlots = () => {
+  qualitySlotOrder = gsap.utils.shuffle([...qualitySlots])
+  qualitySlotCursor = 0
+}
+
+const setRandomQualityPosition = (word) => {
+  if (qualitySlotCursor === 0 || qualitySlotCursor >= qualitySlotOrder.length) {
+    shuffleQualitySlots()
+  }
+
+  const slot = qualitySlotOrder[qualitySlotCursor]
+  qualitySlotCursor += 1
+
+  gsap.set(word, {
+    left: `${slot.left}%`,
+    top: `${slot.top}%`,
+    xPercent: -50,
+    yPercent: -50,
+    x: gsap.utils.random(-4, 4),
+    y: gsap.utils.random(-4, 4),
+  })
+}
+
+const getSourceFlightVector = (node, target) => {
+  const nodeRect = node.getBoundingClientRect()
+  const targetRect = target.getBoundingClientRect()
+
+  return {
+    x: targetRect.left + targetRect.width / 2 - (nodeRect.left + nodeRect.width / 2),
+    y: targetRect.top + targetRect.height / 2 - (nodeRect.top + nodeRect.height / 2),
+  }
+}
+
+const addSourceFlight = (timeline, node, target, at, duration = 1.08) => {
+  const vector = getSourceFlightVector(node, target)
+
+  timeline
+    .fromTo(node, {
+      x: 0,
+      y: 0,
+      scale: 1,
+      opacity: 0,
+      filter: 'brightness(1)',
+    }, {
+      opacity: 0.9,
+      duration: 0.08,
+      ease: 'none',
+    }, at)
+    .to(node, {
+      x: vector.x,
+      y: vector.y,
+      scale: 0.1,
+      opacity: 0.88,
+      filter: 'brightness(1)',
+      duration: duration * 0.82,
+      ease: 'power3.inOut',
+    }, at + 0.03)
+    .to(node, {
+      opacity: 0,
+      filter: 'brightness(0.62)',
+      duration: duration * 0.22,
+      ease: 'power1.out',
+    }, at + duration * 0.78)
+}
+
+const playSourceFlights = async () => {
+  await nextTick()
+  resetSourceFlights()
+
+  if (!sourceVisual.value || props.activeStageId !== 'source' || !props.isPlaying) {
+    return
+  }
+
+  const text = sourceVisual.value.querySelector('.pipeline-source-flight--text')
+  const image = sourceVisual.value.querySelector('.pipeline-source-flight--image')
+  const api = sourceVisual.value.querySelector('.pipeline-source-flight--api')
+  const core = sourceVisual.value.querySelector('.pipeline-source-core')
+
+  if (!text || !image || !api || !core) {
+    return
+  }
+
+  sourceTimeline = gsap.timeline({ repeat: -1, repeatDelay: 0.58 })
+
+  sourceTimeline
+    .set([text, image, api], { opacity: 0, scale: 1, x: 0, y: 0 })
+    .to(core, {
+      scale: 1.18,
+      duration: 0.18,
+      ease: 'power2.out',
+      yoyo: true,
+      repeat: 1,
+      transformOrigin: '50% 50%',
+    }, 0.92)
+
+  addSourceFlight(sourceTimeline, api, core, 0, 1.25)
+  addSourceFlight(sourceTimeline, text, core, 0.38, 1.35)
+  addSourceFlight(sourceTimeline, image, core, 0.58, 1.35)
+}
+
+const playQualityWords = async () => {
+  await nextTick()
+  resetQualityWords()
+
+  if (!qualityVisual.value || props.activeStageId !== 'quality' || !props.isPlaying) {
+    return
+  }
+
+  const words = [...qualityVisual.value.querySelectorAll('i')]
+  qualityTimeline = gsap.timeline({ repeat: -1 })
+
+  words.forEach((word, index) => {
+    qualityTimeline
+      .call(() => setRandomQualityPosition(word), null, index * 0.38)
+      .fromTo(word, {
+        opacity: 0,
+        filter: 'blur(1.6px)',
+        scale: 0.9,
+      }, {
+        opacity: 1,
+        filter: 'blur(0px)',
+        scale: 1,
+        duration: 0.28,
+        ease: 'power2.out',
+      }, index * 0.38)
+      .to(word, {
+        opacity: 0,
+        filter: 'blur(1.4px)',
+        scale: 0.94,
+        duration: 0.42,
+        ease: 'power2.in',
+      }, index * 0.38 + 1.05)
+  })
+}
+
+watch(
+  () => [props.activeStageId, props.isPlaying],
+  () => {
+    playSourceFlights()
+    playQualityWords()
+  },
+  { immediate: true },
+)
+
+onMounted(() => {
+  playSourceFlights()
+  playQualityWords()
+})
+
+onUnmounted(() => {
+  resetSourceFlights()
+  resetQualityWords()
+})
 </script>
 
 <template>
@@ -53,8 +283,67 @@ defineEmits(['select-stage'])
             执行中
           </span>
 
-          <span class="pipeline-module__nodes" aria-hidden="true">
-            <i v-for="nodeIndex in 6" :key="nodeIndex"></i>
+          <span
+            class="pipeline-module__visual"
+            :class="`pipeline-module__visual--${stage.id}`"
+            :ref="stage.id === 'source' ? setSourceVisual : stage.id === 'quality' ? setQualityVisual : undefined"
+            aria-hidden="true"
+          >
+            <template v-if="stage.id === 'source'">
+              <i>文</i>
+              <i>图</i>
+              <i>API</i>
+              <span class="pipeline-source-flight pipeline-source-flight--text">文</span>
+              <span class="pipeline-source-flight pipeline-source-flight--image">图</span>
+              <span class="pipeline-source-flight pipeline-source-flight--api">API</span>
+              <b class="pipeline-source-core"></b>
+            </template>
+
+            <template v-else-if="stage.id === 'collect'">
+              <i>文</i>
+              <i>图</i>
+              <span>A</span>
+              <span>K</span>
+              <span>M</span>
+              <span>R</span>
+              <span>T</span>
+              <span>D</span>
+              <span>N</span>
+              <span>S</span>
+              <span>E</span>
+              <span>Q</span>
+              <b></b>
+              <b></b>
+              <b></b>
+            </template>
+
+            <template v-else-if="stage.id === 'annotate'">
+              <span
+                v-for="(image, imageIndex) in annotationImages"
+                :key="image.src"
+                class="pipeline-annotate-frame"
+                :style="{ '--annotate-frame-index': imageIndex }"
+              >
+                <img :src="image.src" :alt="image.alt" />
+                <i></i>
+                <i></i>
+                <i></i>
+              </span>
+            </template>
+
+            <template v-else-if="stage.id === 'quality'">
+              <i>字段完整性</i>
+              <i>标注一致性</i>
+              <i>可追溯性</i>
+              <i>标签准确性</i>
+            </template>
+
+            <template v-else>
+              <i></i>
+              <i></i>
+              <i></i>
+              <b></b>
+            </template>
           </span>
         </button>
 
@@ -353,11 +642,11 @@ defineEmits(['select-stage'])
   line-height: 1;
 }
 
-.pipeline-module__nodes {
+.pipeline-module__visual {
   position: relative;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
+  display: block;
+  overflow: hidden;
+  min-height: 76px;
   margin-top: 20px;
   padding: 14px;
   border: 1px solid rgba(169, 216, 216, 0.1);
@@ -365,37 +654,429 @@ defineEmits(['select-stage'])
   background: rgba(1, 10, 16, 0.32);
 }
 
-.pipeline-module__nodes::before {
+.pipeline-module__visual::before {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  content: '';
+  background:
+    linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), transparent 78%), transparent);
+  opacity: 0.42;
+  transform: translateX(-80%);
+}
+
+.pipeline-module--running .pipeline-module__visual::before {
+  animation: pipeline-visual-sweep 1.6s ease-in-out infinite;
+}
+
+.pipeline-module__visual i,
+.pipeline-module__visual b,
+.pipeline-module__visual strong {
+  position: absolute;
+  z-index: 1;
+}
+
+.pipeline-module__visual--source i {
+  display: grid;
+  width: 28px;
+  height: 22px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--stage-accent), #ffffff 12%);
+  border-radius: 5px;
+  color: rgba(237, 247, 246, 0.92);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent),
+    color-mix(in srgb, var(--stage-accent), #06171a 54%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04),
+    0 0 14px color-mix(in srgb, var(--stage-accent), transparent 70%);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0.92;
+  transform-origin: center;
+}
+
+.pipeline-module__visual--source i:nth-child(1) {
+  left: 10px;
+  top: 12px;
+}
+
+.pipeline-module__visual--source i:nth-child(2) {
+  left: 10px;
+  bottom: 12px;
+}
+
+.pipeline-module__visual--source i:nth-child(3) {
+  left: 48px;
+  top: 27px;
+  width: 34px;
+}
+
+.pipeline-module__visual--source b {
+  z-index: 3;
+  right: 18px;
+  top: 50%;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--stage-accent), #ffffff 20%);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--stage-accent), transparent 36%);
+  transform: translateY(-50%);
+}
+
+.pipeline-module__visual--source::after {
+  position: absolute;
+  left: 38px;
+  right: 42px;
+  top: 50%;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), transparent 42%));
+  opacity: 0.34;
+}
+
+.pipeline-source-flight {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  width: 28px;
+  height: 22px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--stage-accent), #ffffff 18%);
+  border-radius: 5px;
+  color: rgba(237, 247, 246, 0.95);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.16), transparent),
+    color-mix(in srgb, var(--stage-accent), #06171a 42%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.045),
+    0 0 16px color-mix(in srgb, var(--stage-accent), transparent 56%);
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center;
+}
+
+.pipeline-source-flight--text {
+  left: 10px;
+  top: 12px;
+}
+
+.pipeline-source-flight--image {
+  left: 10px;
+  bottom: 12px;
+}
+
+.pipeline-source-flight--api {
+  left: 48px;
+  top: 27px;
+  width: 34px;
+}
+
+.pipeline-module__visual--collect i {
+  display: grid;
+  width: 28px;
+  height: 20px;
+  place-items: center;
+  border-radius: 5px;
+  color: rgba(237, 247, 246, 0.75);
+  background: color-mix(in srgb, var(--stage-accent), transparent 78%);
+  font-size: 10px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.pipeline-module__visual--collect i:nth-child(1) { left: 12px; top: 14px; }
+.pipeline-module__visual--collect i:nth-child(2) { left: 12px; bottom: 14px; }
+
+.pipeline-module__visual--collect b {
+  left: 58px;
+  right: 12px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--stage-accent), transparent 70%), transparent);
+}
+
+.pipeline-module__visual--collect b:nth-of-type(1) { top: 17px; opacity: 0.48; }
+.pipeline-module__visual--collect b:nth-of-type(2) { top: 34px; opacity: 0.72; }
+.pipeline-module__visual--collect b:nth-of-type(3) { top: 51px; opacity: 0.5; }
+
+.pipeline-module__visual--collect span {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  border-radius: 4px;
+  color: color-mix(in srgb, var(--stage-accent), #ffffff 30%);
+  background: color-mix(in srgb, var(--stage-accent), #06171a 52%);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--stage-accent), transparent 62%);
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+}
+
+.pipeline-module__visual--collect span:nth-of-type(1) { --letter-drift-y: -4px; left: 28px; top: 16px; }
+.pipeline-module__visual--collect span:nth-of-type(2) { --letter-drift-y: 4px; left: 28px; top: 50px; }
+.pipeline-module__visual--collect span:nth-of-type(3) { --letter-drift-y: 6px; left: 40px; top: 22px; }
+.pipeline-module__visual--collect span:nth-of-type(4) { --letter-drift-y: -6px; left: 38px; top: 44px; }
+.pipeline-module__visual--collect span:nth-of-type(5) { --letter-drift-y: 0; left: 48px; top: 34px; }
+.pipeline-module__visual--collect span:nth-of-type(6) { --letter-drift-y: -3px; left: 18px; top: 24px; }
+.pipeline-module__visual--collect span:nth-of-type(7) { --letter-drift-y: 5px; left: 18px; top: 42px; }
+.pipeline-module__visual--collect span:nth-of-type(8) { --letter-drift-y: -7px; left: 52px; top: 18px; }
+.pipeline-module__visual--collect span:nth-of-type(9) { --letter-drift-y: 7px; left: 52px; top: 50px; }
+.pipeline-module__visual--collect span:nth-of-type(10) { --letter-drift-y: 1px; left: 62px; top: 34px; }
+
+.pipeline-module--running .pipeline-module__visual--collect i {
+  animation: pipeline-collect-chip 2.1s ease-in-out infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect b {
+  animation: pipeline-collect-row 2.1s ease-in-out infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span {
+  animation: pipeline-collect-letter 2.05s cubic-bezier(0.32, 0.72, 0.18, 1) infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(2) {
+  animation-delay: 0.18s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(3) {
+  animation-delay: 0.36s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(4) {
+  animation-delay: 0.54s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(5) {
+  animation-delay: 0.72s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(6) {
+  animation-delay: 0.9s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(7) {
+  animation-delay: 1.08s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(8) {
+  animation-delay: 1.26s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(9) {
+  animation-delay: 1.44s;
+}
+
+.pipeline-module--running .pipeline-module__visual--collect span:nth-of-type(10) {
+  animation-delay: 1.62s;
+}
+
+.pipeline-annotate-frame {
+  position: absolute;
+  inset: 8px;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 6px;
+  opacity: 0;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.pipeline-annotate-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.78;
+  transform: scale(1.04);
+}
+
+.pipeline-module__visual--annotate::after {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  z-index: 0;
+  height: 1px;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.34), transparent);
+  opacity: 0.68;
+  pointer-events: none;
+}
+
+.pipeline-module--running .pipeline-module__visual--annotate::after {
+  display: none;
+}
+
+.pipeline-annotate-frame i {
+  position: absolute;
+  border: 2px solid rgba(255, 76, 76, 0.9);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgba(255, 76, 76, 0.34);
+  opacity: 0;
+}
+
+.pipeline-annotate-frame i:nth-of-type(1) {
+  left: 13%;
+  top: 18%;
+  width: 32%;
+  height: 30%;
+  border-color: rgba(255, 82, 82, 0.92);
+  box-shadow: 0 0 12px rgba(255, 82, 82, 0.34);
+}
+
+.pipeline-annotate-frame i:nth-of-type(2) {
+  right: 12%;
+  top: 24%;
+  width: 28%;
+  height: 24%;
+  border-color: rgba(75, 145, 255, 0.92);
+  box-shadow: 0 0 12px rgba(75, 145, 255, 0.34);
+}
+
+.pipeline-annotate-frame i:nth-of-type(3) {
+  left: 30%;
+  bottom: 14%;
+  width: 42%;
+  height: 26%;
+  border-color: rgba(82, 232, 143, 0.92);
+  box-shadow: 0 0 12px rgba(82, 232, 143, 0.34);
+}
+
+.pipeline-module--running .pipeline-annotate-frame {
+  animation: pipeline-annotate-frame 6s ease-in-out infinite;
+  animation-delay: calc(var(--annotate-frame-index) * 2s);
+}
+
+.pipeline-module--running .pipeline-annotate-frame i {
+  animation: pipeline-annotate-mark 6s ease-in-out infinite;
+  animation-delay: calc(var(--annotate-frame-index) * 2s + 0.28s);
+}
+
+.pipeline-module--running .pipeline-annotate-frame i:nth-of-type(2) {
+  animation-delay: calc(var(--annotate-frame-index) * 2s + 0.42s);
+}
+
+.pipeline-module--running .pipeline-annotate-frame i:nth-of-type(3) {
+  animation-delay: calc(var(--annotate-frame-index) * 2s + 0.56s);
+}
+
+.pipeline-module__visual--quality i {
+  display: grid;
+  left: 50%;
+  top: 50%;
+  min-width: 64px;
+  min-height: 25px;
+  place-items: center;
+  padding: 0 9px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent), transparent 48%);
+  border-radius: 999px;
+  color: rgba(237, 247, 246, 0.92);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent),
+    color-mix(in srgb, var(--stage-accent), #06171a 56%);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--stage-accent), transparent 72%);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 900;
+  line-height: 1;
+  opacity: 0;
+  white-space: nowrap;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+
+.pipeline-module__visual--quality i:nth-child(1) {
+  --quality-shift-x: 16px;
+  --quality-shift-y: -10px;
+  left: 22%;
+  top: 26%;
+  animation-delay: 0s;
+}
+
+.pipeline-module__visual--quality i:nth-child(2) {
+  --quality-shift-x: -18px;
+  --quality-shift-y: 12px;
+  left: 74%;
+  top: 28%;
+  animation-delay: 0.36s;
+}
+
+.pipeline-module__visual--quality i:nth-child(3) {
+  --quality-shift-x: -14px;
+  --quality-shift-y: -12px;
+  left: 78%;
+  top: 76%;
+  animation-delay: 0.72s;
+}
+
+.pipeline-module__visual--quality i:nth-child(4) {
+  --quality-shift-x: 18px;
+  --quality-shift-y: 10px;
+  left: 24%;
+  top: 76%;
+  animation-delay: 1.08s;
+}
+
+.pipeline-module__visual--quality::after {
   position: absolute;
   left: 14px;
   right: 14px;
   top: 50%;
-  pointer-events: none;
-  content: '';
   height: 1px;
-  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), transparent 42%), transparent);
+  content: '';
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), transparent 46%), transparent);
+  opacity: 0.58;
 }
 
-.pipeline-module__nodes i {
-  width: 11px;
-  height: 11px;
-  justify-self: center;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--stage-accent), #ffffff 20%);
-  box-shadow:
-    0 0 14px color-mix(in srgb, var(--stage-accent), transparent 18%),
-    0 0 30px color-mix(in srgb, var(--stage-accent), transparent 64%);
+.pipeline-module__visual--product i:nth-child(1) {
+  left: 32px;
+  top: 14px;
+  width: 48px;
+  height: 42px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent), transparent 42%);
+  border-radius: 6px;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--stage-accent), transparent 68%) 0 50%, transparent 50%),
+    rgba(255, 255, 255, 0.04);
 }
 
-.pipeline-module--running .pipeline-module__nodes i {
-  animation: pipeline-node-spark 1.2s ease-in-out infinite;
+.pipeline-module__visual--product i:nth-child(2),
+.pipeline-module__visual--product i:nth-child(3) {
+  left: 42px;
+  right: 42px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.28);
 }
 
-.pipeline-module__nodes i:nth-child(2) { animation-delay: 0.08s; }
-.pipeline-module__nodes i:nth-child(3) { animation-delay: 0.16s; }
-.pipeline-module__nodes i:nth-child(4) { animation-delay: 0.24s; }
-.pipeline-module__nodes i:nth-child(5) { animation-delay: 0.32s; }
-.pipeline-module__nodes i:nth-child(6) { animation-delay: 0.4s; }
+.pipeline-module__visual--product i:nth-child(2) { top: 32px; }
+.pipeline-module__visual--product i:nth-child(3) { top: 43px; opacity: 0.62; }
+
+.pipeline-module__visual--product b {
+  left: 24px;
+  right: 24px;
+  bottom: 12px;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), #ffffff 12%), transparent);
+}
+
+.pipeline-module--running .pipeline-module__visual--product i:nth-child(1) {
+  animation: pipeline-product-pack 2.1s ease-in-out infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--product b {
+  animation: pipeline-product-seal 2.1s ease-in-out infinite;
+}
 
 @keyframes pipeline-connector-wave {
   0% {
@@ -456,16 +1137,130 @@ defineEmits(['select-stage'])
   }
 }
 
-@keyframes pipeline-node-spark {
+@keyframes pipeline-visual-sweep {
+  0% {
+    opacity: 0;
+    transform: translateX(-90%);
+  }
+
+  42% {
+    opacity: 0.42;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(90%);
+  }
+}
+
+@keyframes pipeline-collect-chip {
   0%,
   100% {
     opacity: 0.54;
-    transform: scale(1);
+    transform: translateX(0);
   }
 
   50% {
     opacity: 1;
-    transform: scale(1.28);
+    transform: translateX(12px);
+  }
+}
+
+@keyframes pipeline-collect-row {
+  0%,
+  100% {
+    opacity: 0.28;
+    transform: scaleX(0.64);
+  }
+
+  50% {
+    opacity: 0.56;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes pipeline-collect-letter {
+  0% {
+    opacity: 0;
+    filter: brightness(1);
+    transform: translate(0, 0) scale(1);
+  }
+
+  12% {
+    opacity: 0.92;
+  }
+
+  74% {
+    opacity: 0.92;
+    filter: brightness(1);
+    transform: translate(220px, var(--letter-drift-y, 0)) scale(0.72);
+  }
+
+  99% {
+    opacity: 0.92;
+    filter: brightness(1);
+    transform: translate(255px, var(--letter-drift-y, 0)) scale(0.42);
+  }
+
+  100% {
+    opacity: 0;
+    filter: brightness(1);
+    transform: translate(255px, var(--letter-drift-y, 0)) scale(0.42);
+  }
+}
+
+@keyframes pipeline-annotate-frame {
+  0%,
+  30%,
+  100% {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+
+  4%,
+  24% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pipeline-annotate-mark {
+  0%,
+  4%,
+  30%,
+  100% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+
+  8%,
+  23% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pipeline-product-pack {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.06) translateY(-2px);
+  }
+}
+
+@keyframes pipeline-product-seal {
+  0%,
+  100% {
+    opacity: 0.38;
+    transform: scaleX(0.58);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
   }
 }
 

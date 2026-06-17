@@ -7,7 +7,10 @@ import StageInfoPanel from '../components/build/StageInfoPanel.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import { getBuildOverview } from '../services/mockApi.js'
 
-const GOVERN_INTERVAL_MS = 1800
+const GOVERN_INTERVAL_MS = 2600
+const ITEM_STEP_INTERVAL_MS = 720
+const STAGE_ADVANCE_DELAY_MS = 520
+const ANNOTATE_STAGE_DURATION_MS = 5500
 
 const stages = ref([])
 const metrics = ref([])
@@ -60,7 +63,7 @@ const advanceGovernance = () => {
 const getStageItemCount = (stage) =>
   stage.configGroups?.reduce((total, group) => total + group.items.length, 0) ?? 0
 
-const runSequentialStage = ({ stage, status, progress, duration = 360 }) => {
+const runSequentialStage = ({ stage, status, progress, duration = ITEM_STEP_INTERVAL_MS }) => {
   const total = getStageItemCount(stage)
   status.value = 'loading'
   progress.value = 0
@@ -68,7 +71,7 @@ const runSequentialStage = ({ stage, status, progress, duration = 360 }) => {
   const runNextItem = () => {
     if (progress.value >= total) {
       status.value = 'success'
-      governTimer = window.setTimeout(advanceGovernance, 260)
+      governTimer = window.setTimeout(advanceGovernance, STAGE_ADVANCE_DELAY_MS)
       return
     }
 
@@ -113,8 +116,8 @@ function runGovernanceStep() {
     annotateStatus.value = 'loading'
     governTimer = window.setTimeout(() => {
       annotateStatus.value = 'success'
-      governTimer = window.setTimeout(advanceGovernance, 260)
-    }, 1500)
+      governTimer = window.setTimeout(advanceGovernance, STAGE_ADVANCE_DELAY_MS)
+    }, ANNOTATE_STAGE_DURATION_MS)
     return
   }
 
