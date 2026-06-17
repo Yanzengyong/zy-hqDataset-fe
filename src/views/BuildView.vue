@@ -119,7 +119,7 @@ onUnmounted(() => {
 .build-view {
   position: relative;
   overflow: hidden;
-  min-height: calc(100vh - 132px);
+  min-height: calc(100vh - 80px - 48px);
   padding: 24px;
   border-radius: 8px;
   color: #edf7f6;
@@ -211,7 +211,7 @@ onUnmounted(() => {
 
 @media (max-width: 640px) {
   .build-view {
-    min-height: calc(100vh - 96px);
+    min-height: calc(100vh - 80px - 32px);
     padding: 16px;
     border-radius: 8px;
   }

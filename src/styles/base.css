@@ -33,15 +33,13 @@
 
 html {
   min-width: 320px;
-  min-height: 100%;
-  overflow-x: hidden;
+  height: 100%;
 }
 
 body {
   min-width: 320px;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0;
-  overflow-x: hidden;
   color: var(--color-ink);
   background:
     linear-gradient(180deg, rgba(39, 92, 160, 0.06), transparent 300px),
@@ -88,19 +86,19 @@ select:focus-visible {
 }
 
 #app {
-  min-height: 100vh;
+  height: 100vh;
 }
 
 .app-shell {
-  min-height: 100vh;
+  height: 100vh;
   min-width: 0;
 }
 
 .app-main {
-  width: min(var(--layout-width), calc(100% - 32px));
-  margin: 0 auto;
-  padding: 32px 0;
-  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .placeholder-page {
@@ -186,11 +184,6 @@ select:focus-visible {
 }
 
 @media (max-width: 640px) {
-  .app-main {
-    width: min(var(--layout-width), calc(100% - 24px));
-    padding: 20px 0;
-  }
-
   .placeholder-page {
     grid-template-columns: 1fr;
     padding: 20px;
