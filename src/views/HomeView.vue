@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import AnimatedBackground from '../components/common/AnimatedBackground.vue'
 import DatasetCard from '../components/market/DatasetCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
@@ -11,10 +11,15 @@ const datasets = ref([])
 const loading = ref(true)
 
 const tabs = [
-  { key: 'herb', label: '药材数据集' },
-  { key: 'classic', label: '古籍数据集' },
-  { key: 'clinical', label: '诊疗数据集' },
+  { key: 'herb', label: '药材数据集', bg: '/images/zyy-01.png' },
+  { key: 'classic', label: '古籍数据集', bg: '/images/zyy-02.png' },
+  { key: 'clinical', label: '诊疗数据集', bg: '/images/zyy-03.png' },
 ]
+
+const activeTabBg = computed(() => {
+  const tab = tabs.find(t => t.key === activeTab.value)
+  return tab ? `url(${tab.bg})` : 'none'
+})
 
 const loadDatasets = async () => {
   loading.value = true
@@ -52,7 +57,7 @@ watch(activeTab, loadDatasets)
       </div>
     </div>
 
-    <div class="content-product">
+    <div class="content-product" :style="{ backgroundImage: activeTabBg }">
       <h2 class="content-product__title">数据集产品</h2>
       
       <div class="content-product__tabs">
@@ -68,6 +73,7 @@ watch(activeTab, loadDatasets)
       </div>
 
       <div class="content-product__panel">
+        
         <div v-if="loading" class="content-product__loading">
           <LoadingState text="正在载入数据集..." />
         </div>
@@ -86,8 +92,11 @@ watch(activeTab, loadDatasets)
             @toggle-favorite="handleToggleFavorite"
           />
         </div>
+
       </div>
+
     </div>
+
   </div>
 </template>
 
@@ -165,14 +174,16 @@ watch(activeTab, loadDatasets)
 .content-product {
   position: relative;
   z-index: 2;
-  margin-top: 30px;
-  padding: 0 15%;
+  padding: 120px 15% 20px;
   text-align: center;
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
 }
 
 .content-product__title {
-  margin: 0 0 24px;
-  font-size: 28px;
+  margin: 0 0 60px;
+  font-size: 40px;
   font-weight: 700;
   color: var(--color-ink);
 }
@@ -188,9 +199,9 @@ watch(activeTab, loadDatasets)
   padding: 10px 24px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
-  background: var(--color-panel);
+  background: rgba(255, 255, 255, 0.4);
   color: var(--color-muted);
-  font-size: 15px;
+  font-size: 20px;
   font-weight: 500;
   cursor: pointer;
   transition: all 200ms ease;
@@ -203,7 +214,7 @@ watch(activeTab, loadDatasets)
 
 .content-product__tab.is-active {
   color: var(--color-blue-deep);
-  background: rgba(39, 92, 160, 0.08);
+  background: rgba(234, 234, 235, 0.5);
   border-color: rgba(39, 92, 160, 0.3);
   font-weight: 600;
 }
@@ -213,7 +224,7 @@ watch(activeTab, loadDatasets)
   padding: 32px;
   border: 1px solid var(--color-border);
   border-radius: 12px;
-  background: var(--color-panel);
+  background: rgba(255, 255, 255, 0.5);
 }
 
 .content-product__loading {

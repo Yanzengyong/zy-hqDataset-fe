@@ -2,7 +2,7 @@
 const props = defineProps({
   backgroundColor: {
     type: String,
-    default: '#f8fafc',
+    default: 'rgb(250 244 227)',
   },
   gridColor: {
     type: String,

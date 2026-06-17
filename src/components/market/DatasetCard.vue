@@ -123,7 +123,7 @@ const openDetail = () => {
   border-radius: 8px;
   background:
     linear-gradient(135deg, rgba(39, 92, 160, 0.08), rgba(18, 127, 132, 0.04)),
-    #f8fbff;
+    rgba(248, 251, 255, 0.9);
   box-shadow: 0 8px 22px rgba(24, 36, 51, 0.04);
   cursor: pointer;
   transition:
