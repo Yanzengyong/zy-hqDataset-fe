@@ -224,9 +224,10 @@ onUnmounted(() => {
 .build-view {
   position: relative;
   overflow: hidden;
-  min-height: calc(100vh - 80px - 48px);
+  /* min-height: calc(100vh - 80px - 48px); */
+  min-height: calc(100vh - 80px);
   padding: 24px;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   color: #edf7f6;
   background:
     radial-gradient(circle at 22% 12%, rgba(31, 138, 112, 0.24), transparent 32%),

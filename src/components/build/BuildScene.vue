@@ -1037,29 +1037,44 @@ onUnmounted(() => {
   opacity: 0.58;
 }
 
-.pipeline-module__visual--product i:nth-child(1) {
-  left: 32px;
-  top: 14px;
-  width: 48px;
-  height: 42px;
-  border: 1px solid color-mix(in srgb, var(--stage-accent), transparent 42%);
+.pipeline-module__visual--product i {
+  left: 10px;
+  top: 20px;
+  width: 34px;
+  height: 30px;
+  border: 1px solid color-mix(in srgb, var(--stage-accent), #ffffff 12%);
   border-radius: 6px;
+  opacity: 0.42;
   background:
-    linear-gradient(135deg, color-mix(in srgb, var(--stage-accent), transparent 68%) 0 50%, transparent 50%),
-    rgba(255, 255, 255, 0.04);
+    linear-gradient(135deg, color-mix(in srgb, var(--stage-accent), transparent 58%) 0 49%, transparent 50%),
+    linear-gradient(45deg, transparent 0 49%, rgba(255, 255, 255, 0.18) 50% 53%, transparent 54%),
+    color-mix(in srgb, var(--stage-accent), #06171a 50%);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.035),
+    0 0 14px color-mix(in srgb, var(--stage-accent), transparent 68%);
 }
 
-.pipeline-module__visual--product i:nth-child(2),
-.pipeline-module__visual--product i:nth-child(3) {
-  left: 42px;
-  right: 42px;
-  height: 2px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.28);
+.pipeline-module__visual--product i::before,
+.pipeline-module__visual--product i::after {
+  position: absolute;
+  content: '';
 }
 
-.pipeline-module__visual--product i:nth-child(2) { top: 32px; }
-.pipeline-module__visual--product i:nth-child(3) { top: 43px; opacity: 0.62; }
+.pipeline-module__visual--product i::before {
+  left: 6px;
+  right: 6px;
+  top: 9px;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.pipeline-module__visual--product i::after {
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.18);
+}
 
 .pipeline-module__visual--product b {
   left: 24px;
@@ -1071,7 +1086,23 @@ onUnmounted(() => {
 }
 
 .pipeline-module--running .pipeline-module__visual--product i:nth-child(1) {
-  animation: pipeline-product-pack 2.1s ease-in-out infinite;
+  animation: pipeline-product-pack 2.7s linear infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--product i:nth-child(2),
+.pipeline-module--running .pipeline-module__visual--product i:nth-child(3) {
+  animation-name: pipeline-product-pack;
+  animation-duration: 2.7s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual--product i:nth-child(2) {
+  animation-delay: 0.52s;
+}
+
+.pipeline-module--running .pipeline-module__visual--product i:nth-child(3) {
+  animation-delay: 1.04s;
 }
 
 .pipeline-module--running .pipeline-module__visual--product b {
@@ -1241,13 +1272,23 @@ onUnmounted(() => {
 }
 
 @keyframes pipeline-product-pack {
-  0%,
-  100% {
-    transform: scale(1);
+  0% {
+    opacity: 0;
+    transform: translateX(-18px) scale(0.88);
   }
 
-  50% {
-    transform: scale(1.06) translateY(-2px);
+  12% {
+    opacity: 0.9;
+  }
+
+  72% {
+    opacity: 0.9;
+    transform: translateX(198px) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(230px) scale(0.82);
   }
 }
 
