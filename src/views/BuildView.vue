@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import BuildMetrics from '../components/build/BuildMetrics.vue'
 import BuildScene from '../components/build/BuildScene.vue'
 import FlowControls from '../components/build/FlowControls.vue'
@@ -7,51 +7,145 @@ import StageInfoPanel from '../components/build/StageInfoPanel.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import { getBuildOverview } from '../services/mockApi.js'
 
-const PLAY_INTERVAL_MS = 2600
+const GOVERN_INTERVAL_MS = 1800
 
 const stages = ref([])
 const metrics = ref([])
 const activeStageId = ref('')
-const isPlaying = ref(true)
+const isGoverning = ref(false)
+const sourceAccessStatus = ref('idle')
+const collectStatus = ref('idle')
+const annotateStatus = ref('idle')
+const qualityStatus = ref('idle')
+const sourceProgress = ref(0)
+const collectProgress = ref(0)
+const qualityProgress = ref(0)
 const loading = ref(true)
-let playTimer = null
+let governTimer = null
+let governIndex = 0
 
 const activeStage = computed(() =>
   stages.value.find((stage) => stage.id === activeStageId.value) ?? stages.value[0] ?? null,
 )
 
-const clearPlayTimer = () => {
-  if (playTimer) {
-    window.clearInterval(playTimer)
-    playTimer = null
-  }
-}
-
-const advanceStage = () => {
-  if (!stages.value.length) {
-    return
-  }
-
-  const currentIndex = stages.value.findIndex((stage) => stage.id === activeStageId.value)
-  const nextIndex = currentIndex >= 0 ? (currentIndex + 1) % stages.value.length : 0
-  activeStageId.value = stages.value[nextIndex].id
-}
-
-const syncAutoplay = () => {
-  clearPlayTimer()
-
-  if (isPlaying.value && stages.value.length > 1) {
-    playTimer = window.setInterval(advanceStage, PLAY_INTERVAL_MS)
+const clearGovernTimer = () => {
+  if (governTimer) {
+    window.clearTimeout(governTimer)
+    governTimer = null
   }
 }
 
 const selectStage = (stageId) => {
   activeStageId.value = stageId
-  isPlaying.value = false
+  isGoverning.value = false
+  clearGovernTimer()
 }
 
-const togglePlay = () => {
-  isPlaying.value = !isPlaying.value
+const completeGovernance = () => {
+  clearGovernTimer()
+  isGoverning.value = false
+}
+
+const advanceGovernance = () => {
+  governIndex += 1
+
+  if (governIndex >= stages.value.length) {
+    completeGovernance()
+    return
+  }
+
+  runGovernanceStep()
+}
+
+const getStageItemCount = (stage) =>
+  stage.configGroups?.reduce((total, group) => total + group.items.length, 0) ?? 0
+
+const runSequentialStage = ({ stage, status, progress, duration = 360 }) => {
+  const total = getStageItemCount(stage)
+  status.value = 'loading'
+  progress.value = 0
+
+  const runNextItem = () => {
+    if (progress.value >= total) {
+      status.value = 'success'
+      governTimer = window.setTimeout(advanceGovernance, 260)
+      return
+    }
+
+    governTimer = window.setTimeout(() => {
+      progress.value += 1
+      runNextItem()
+    }, duration)
+  }
+
+  runNextItem()
+}
+
+function runGovernanceStep() {
+  const currentStage = stages.value[governIndex]
+
+  if (!currentStage) {
+    completeGovernance()
+    return
+  }
+
+  activeStageId.value = currentStage.id
+
+  if (currentStage.id === 'source') {
+    runSequentialStage({
+      stage: currentStage,
+      status: sourceAccessStatus,
+      progress: sourceProgress,
+    })
+    return
+  }
+
+  if (currentStage.id === 'collect') {
+    runSequentialStage({
+      stage: currentStage,
+      status: collectStatus,
+      progress: collectProgress,
+    })
+    return
+  }
+
+  if (currentStage.id === 'annotate') {
+    annotateStatus.value = 'loading'
+    governTimer = window.setTimeout(() => {
+      annotateStatus.value = 'success'
+      governTimer = window.setTimeout(advanceGovernance, 260)
+    }, 1500)
+    return
+  }
+
+  if (currentStage.id === 'quality') {
+    runSequentialStage({
+      stage: currentStage,
+      status: qualityStatus,
+      progress: qualityProgress,
+    })
+    return
+  }
+
+  governTimer = window.setTimeout(advanceGovernance, GOVERN_INTERVAL_MS)
+}
+
+const startGovernance = () => {
+  if (isGoverning.value || stages.value.length === 0) {
+    return
+  }
+
+  clearGovernTimer()
+  isGoverning.value = true
+  sourceAccessStatus.value = 'idle'
+  collectStatus.value = 'idle'
+  annotateStatus.value = 'idle'
+  qualityStatus.value = 'idle'
+  sourceProgress.value = 0
+  collectProgress.value = 0
+  qualityProgress.value = 0
+  governIndex = 0
+  runGovernanceStep()
 }
 
 onMounted(async () => {
@@ -67,10 +161,8 @@ onMounted(async () => {
   }
 })
 
-watch([isPlaying, stages], syncAutoplay, { deep: true })
-
 onUnmounted(() => {
-  clearPlayTimer()
+  clearGovernTimer()
 })
 </script>
 
@@ -98,18 +190,28 @@ onUnmounted(() => {
           class="build-view__scene"
           :stages="stages"
           :active-stage-id="activeStageId"
-          :is-playing="isPlaying"
+          :is-playing="isGoverning"
           @select-stage="selectStage"
         />
-        <StageInfoPanel class="build-view__panel" :stage="activeStage" />
       </div>
 
       <FlowControls
         :stages="stages"
         :active-stage-id="activeStageId"
-        :is-playing="isPlaying"
-        @toggle-play="togglePlay"
+        :is-governing="isGoverning"
+        @start-governance="startGovernance"
         @select-stage="selectStage"
+      />
+
+      <StageInfoPanel
+        :stage="activeStage"
+        :source-access-status="sourceAccessStatus"
+        :collect-status="collectStatus"
+        :annotate-status="annotateStatus"
+        :quality-status="qualityStatus"
+        :source-progress="sourceProgress"
+        :collect-progress="collectProgress"
+        :quality-progress="qualityProgress"
       />
     </template>
   </section>
@@ -186,21 +288,15 @@ onUnmounted(() => {
 }
 
 .build-view__workspace {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
-  gap: 16px;
-  align-items: stretch;
   margin-top: 16px;
 }
 
-.build-view__scene,
-.build-view__panel {
+.build-view__scene {
   min-width: 0;
 }
 
 @media (max-width: 980px) {
-  .build-view__header,
-  .build-view__workspace {
+  .build-view__header {
     grid-template-columns: 1fr;
   }
 

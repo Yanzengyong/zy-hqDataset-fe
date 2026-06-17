@@ -101,6 +101,11 @@ select:focus-visible {
   overflow-x: hidden;
 }
 
+.app-main--build {
+  width: 100%;
+  padding: 24px clamp(16px, 2vw, 32px);
+}
+
 .placeholder-page {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
