@@ -136,7 +136,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="dataset-detail">
+  <section class="dataset-detail page-scrollbar">
     <header class="dataset-detail__header">
       <Breadcrumb :items="breadcrumbItems" />
     </header>
@@ -201,29 +201,6 @@ onUnmounted(() => {
   min-height: calc(100vh - 132px);
   height: calc(100vh - 80px);
   overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
-}
-
-.dataset-detail::-webkit-scrollbar {
-  width: 6px;
-}
-
-.dataset-detail::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.dataset-detail::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 92, 160, 0.3);
-  border-radius: 3px;
-}
-
-.dataset-detail::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(39, 92, 160, 0.55);
-}
-
-.dataset-detail::-webkit-scrollbar-thumb:active {
-  background-color: rgba(39, 92, 160, 0.75);
 }
 
 .dataset-detail__header {

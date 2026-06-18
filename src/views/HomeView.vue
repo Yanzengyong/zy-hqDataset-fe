@@ -46,14 +46,14 @@ watch(activeTab, loadDatasets)
 
 <template>
   <AnimatedBackground />
-  <div class="home-content">
+  <div class="home-content page-scrollbar">
     <div class="content-wrapper">
       <div class="header-section">
         <div class="header-title">
           <h3 class="title">中医药（苗药）数据集构建流程</h3>
           <!-- <p class="sub-title">赋能大模型的预训练、微调和评测</p> -->
         </div>
-        <video src="/video/banner_zh.mp4" width="80%" autoplay muted loop class="welcome-video"></video>
+        <img src="/images/index-01.png" alt="" class="welcome-video" />
       </div>
     </div>
 
@@ -103,37 +103,15 @@ watch(activeTab, loadDatasets)
 <style scoped>
 .home-content {
   height: calc(100vh - 80px);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
-}
-
-.home-content::-webkit-scrollbar {
-  width: 6px;
-}
-
-.home-content::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.home-content::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 92, 160, 0.3);
-  border-radius: 3px;
-}
-
-.home-content::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(39, 92, 160, 0.55);
-}
-
-.home-content::-webkit-scrollbar-thumb:active {
-  background-color: rgba(39, 92, 160, 0.75);
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 
 .content-wrapper {
   position: relative;
   z-index: 2;
-  max-width: 100vw;
-  width: 100vw;
+  max-width: 100%;
+  width: 100%;
   box-sizing: border-box;
   background-color: black;
 }
@@ -141,14 +119,14 @@ watch(activeTab, loadDatasets)
 .header-section {
   position: relative;
   animation: slideDown 0.8s ease-out;
-  width: 100vw;
+  width: 100%;
   text-align: center;
   background-color: black;
 }
 
 .header-title{
   position: absolute;
-  top: 7rem;
+  top: 1.25rem;
   left: 50%;
   text-align: center;
   transform: translateX(-50%);
@@ -168,6 +146,8 @@ watch(activeTab, loadDatasets)
 }
 
 .welcome-video {
+  display: block;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -254,6 +234,16 @@ watch(activeTab, loadDatasets)
 }
 
 @media (max-width: 768px) {
+  .header-title {
+    top: 1.5rem;
+    width: 90%;
+  }
+
+  .header-title .title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+
   .content-product {
     padding: 0 5%;
   }
