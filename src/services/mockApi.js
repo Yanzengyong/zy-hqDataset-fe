@@ -133,7 +133,7 @@ export const simulateDownload = async (id) => {
   }
 }
 
-export const getDatasetsByCategory = async (category) => {
+export const getDatasetsByCategory = async (category, limit = 9) => {
   await delay()
   
   const categoryMap = {
@@ -153,5 +153,6 @@ export const getDatasetsByCategory = async (category) => {
   const filterFn = categoryMap[category]
   if (!filterFn) return []
   
-  return clone(datasets.filter(filterFn))
+  const filtered = datasets.filter(filterFn)
+  return clone(limit ? filtered.slice(0, limit) : filtered)
 }

@@ -1,7 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import AnimatedBackground from '../components/common/AnimatedBackground.vue'
-import DatasetCard from '../components/market/DatasetCard.vue'
+import DatasetGridCard from '../components/market/DatasetGridCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import EmptyState from '../components/common/EmptyState.vue'
 import { getDatasetsByCategory, toggleFavorite } from '../services/mockApi.js'
@@ -24,7 +23,7 @@ const activeTabBg = computed(() => {
 const loadDatasets = async () => {
   loading.value = true
   try {
-    datasets.value = await getDatasetsByCategory(activeTab.value)
+    datasets.value = await getDatasetsByCategory(activeTab.value, 9)
   } finally {
     loading.value = false
   }
@@ -55,7 +54,7 @@ watch(activeTab, loadDatasets)
       </div>
       <div class="content-wrapper">
         <div class="header-section">
-          <img src="/images/index-01.png" alt="" class="welcome-video" />
+          <img src="/images/index-00.png" alt="" class="welcome-video" />
         </div>
       </div>
     </div>
@@ -88,7 +87,7 @@ watch(activeTab, loadDatasets)
         />
         
         <div v-else class="content-product__list">
-          <DatasetCard
+          <DatasetGridCard
             v-for="dataset in datasets"
             :key="dataset.id"
             :dataset="dataset"
@@ -167,7 +166,8 @@ watch(activeTab, loadDatasets)
   display: block;
   width: 80%;
   margin: 0 auto;
-  opacity: 0.9;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .content-product {
@@ -249,7 +249,16 @@ watch(activeTab, loadDatasets)
 
   &__list {
     display: grid;
-    gap: 16px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
+    @media (max-width: 1200px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
 }
 
