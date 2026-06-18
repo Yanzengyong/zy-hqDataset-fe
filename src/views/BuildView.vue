@@ -170,7 +170,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="build-view" aria-labelledby="build-page-title">
+  <section class="build-view page-scrollbar" aria-labelledby="build-page-title">
     <header class="build-view__header">
       <div>
         <p class="build-view__eyebrow">高质量数据集构建流</p>
@@ -223,9 +223,11 @@ onUnmounted(() => {
 <style scoped>
 .build-view {
   position: relative;
-  overflow: hidden;
   /* min-height: calc(100vh - 80px - 48px); */
   min-height: calc(100vh - 80px);
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
   padding: 24px;
   /* border-radius: 8px; */
   color: #edf7f6;
