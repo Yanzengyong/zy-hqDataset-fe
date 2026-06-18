@@ -53,6 +53,7 @@ watch(activeTab, loadDatasets)
         <p class="sub-title">赋能大模型的预训练、微调和评测</p>
       </div>
       <div class="content-wrapper">
+
         <div class="header-section">
           <img src="/images/index-00.png" alt="" class="welcome-video" />
         </div>
@@ -61,7 +62,6 @@ watch(activeTab, loadDatasets)
 
     <div class="content-product" :style="{ backgroundImage: activeTabBg }">
       <h2 class="content-product__title">数据集产品</h2>
-      
       <div class="content-product__tabs">
         <button
           v-for="tab in tabs"
@@ -110,7 +110,7 @@ watch(activeTab, loadDatasets)
   background-image: url('/images/index-05.png');
   background-repeat: no-repeat;
   background-position: top right;
-  background-size: 100% 400px;
+  background-size: 100% 500px;
   position: relative;
 }
 
@@ -143,6 +143,7 @@ watch(activeTab, loadDatasets)
   animation: slideDown 0.8s ease-out;
   width: 100%;
   text-align: center;
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .header-title {
@@ -167,7 +168,7 @@ watch(activeTab, loadDatasets)
   width: 80%;
   margin: 0 auto;
   opacity: 1;
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .content-product {
@@ -234,11 +235,7 @@ watch(activeTab, loadDatasets)
   }
 
   &__panel {
-    min-height: 1120px;
-    padding: 32px;
-    border: 1px solid var(--color-border);
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.5);
+    min-height: 800px;
   }
 
   &__loading {
