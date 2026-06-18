@@ -187,7 +187,7 @@ watch(activeTab, loadDatasets)
   position: relative;
   z-index: 2;
   overflow: hidden;
-  padding: 100px 15% 20px;
+  padding: 100px clamp(16px, 5vw, 80px) 20px;
   text-align: center;
   background-repeat: no-repeat;
   background-position: center;
@@ -251,7 +251,9 @@ watch(activeTab, loadDatasets)
   }
 
   &__panel {
+    width: min(100%, 1440px);
     min-height: 800px;
+    margin: 0 auto;
   }
 
   &__loading {
@@ -262,15 +264,20 @@ watch(activeTab, loadDatasets)
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 20px;
+    width: 100%;
+    margin: 0 auto;
 
     @media (max-width: 1200px) {
-      grid-template-columns: repeat(2, 1fr);
+      max-width: 920px;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     @media (max-width: 768px) {
-      grid-template-columns: 1fr;
+      max-width: 460px;
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 }
@@ -287,7 +294,7 @@ watch(activeTab, loadDatasets)
   }
 
   .content-product {
-    padding: 0 5%;
+    padding: 0 16px;
 
     &__panel {
       min-height: 900px;

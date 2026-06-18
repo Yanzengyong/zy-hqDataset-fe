@@ -565,8 +565,9 @@ onUnmounted(() => {
 .pipeline-module--running {
   box-shadow:
     inset 0 0 0 1px rgba(255, 255, 255, 0.05),
-    0 0 18px color-mix(in srgb, var(--stage-accent), transparent 35%),
-    0 24px 62px color-mix(in srgb, var(--stage-accent), transparent 72%);
+    0 0 24px color-mix(in srgb, var(--stage-accent), transparent 28%),
+    0 28px 72px color-mix(in srgb, var(--stage-accent), transparent 68%);
+  transform: translateY(calc((var(--stage-index) % 2) * 22px - 9px)) scale(1.05);
 }
 
 .pipeline-module--running::after {
@@ -652,21 +653,59 @@ onUnmounted(() => {
   border: 1px solid rgba(169, 216, 216, 0.1);
   border-radius: 8px;
   background: rgba(1, 10, 16, 0.32);
+  transform-origin: center;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.22s ease;
 }
 
-.pipeline-module__visual::before {
+.pipeline-module__visual::before,
+.pipeline-module__visual::after {
   position: absolute;
   inset: 0;
   pointer-events: none;
   content: '';
+}
+
+.pipeline-module__visual::before {
   background:
     linear-gradient(90deg, transparent, color-mix(in srgb, var(--stage-accent), transparent 78%), transparent);
   opacity: 0.42;
   transform: translateX(-80%);
 }
 
+.pipeline-module__visual::after {
+  border: 1px solid color-mix(in srgb, var(--stage-accent), transparent 44%);
+  border-radius: inherit;
+  background:
+    linear-gradient(90deg, transparent 0 18%, color-mix(in srgb, var(--stage-accent), #ffffff 18%) 36%, transparent 54%),
+    linear-gradient(180deg, transparent 0 24%, color-mix(in srgb, var(--stage-accent), #ffffff 26%) 50%, transparent 76%);
+  background-size: 220% 100%, 100% 220%;
+  mix-blend-mode: screen;
+  opacity: 0;
+  filter: blur(0.3px);
+}
+
 .pipeline-module--running .pipeline-module__visual::before {
   animation: pipeline-visual-sweep 1.6s ease-in-out infinite;
+}
+
+.pipeline-module--running .pipeline-module__visual {
+  width: calc(100% - 18px);
+  min-height: 86px;
+  margin-right: auto;
+  margin-left: auto;
+  border-color: color-mix(in srgb, var(--stage-accent), #ffffff 12%);
+  box-shadow:
+    inset 0 0 18px color-mix(in srgb, var(--stage-accent), transparent 78%),
+    0 0 22px color-mix(in srgb, var(--stage-accent), transparent 58%);
+  transform: scale(1.02);
+}
+
+.pipeline-module--running .pipeline-module__visual::after {
+  opacity: 0.72;
+  animation: pipeline-visual-ripple-border 2.2s linear infinite;
 }
 
 .pipeline-module__visual i,
@@ -1181,6 +1220,22 @@ onUnmounted(() => {
   100% {
     opacity: 0;
     transform: translateX(90%);
+  }
+}
+
+@keyframes pipeline-visual-ripple-border {
+  0% {
+    background-position: 120% 0, 0 120%;
+    opacity: 0.34;
+  }
+
+  42% {
+    opacity: 0.78;
+  }
+
+  100% {
+    background-position: -120% 0, 0 -120%;
+    opacity: 0.34;
   }
 }
 
