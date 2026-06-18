@@ -123,7 +123,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(31, 141, 122, 0.16);
 }
 
 .dataset-search__segments span {
@@ -131,15 +131,15 @@ onBeforeUnmount(() => {
   min-height: 38px;
   padding: 8px 13px;
   border-bottom: 2px solid transparent;
-  color: var(--color-muted);
+  color: #64766d;
   font-size: 14px;
   font-weight: 700;
   line-height: 1.4;
 }
 
 .dataset-search__segments span.is-active {
-  border-bottom-color: var(--color-blue);
-  color: var(--color-blue-deep);
+  border-bottom-color: #b68a37;
+  color: #0d675d;
 }
 
 .dataset-search__row {
@@ -157,10 +157,11 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   padding: 0 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.2);
   border-radius: 6px;
-  color: var(--color-muted);
-  background: #ffffff;
+  color: #697b72;
+  background: rgba(255, 253, 246, 0.96);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .dataset-search__input input {
@@ -200,23 +201,25 @@ onBeforeUnmount(() => {
 
 .dataset-search__button--primary {
   color: #ffffff;
-  background: var(--color-blue);
+  background: linear-gradient(135deg, #1f8d7a, #0d675d);
+  box-shadow: 0 8px 16px rgba(31, 141, 122, 0.18);
 }
 
 .dataset-search__button--primary:hover {
-  background: var(--color-blue-deep);
+  background: linear-gradient(135deg, #239a84, #0b5d53);
 }
 
 .dataset-search__button--publish,
 .dataset-search__advanced,
 .dataset-search__sort {
   border: 1px solid var(--color-border);
-  color: var(--color-ink-soft);
-  background: #ffffff;
+  color: #30433c;
+  background: rgba(255, 253, 246, 0.94);
 }
 
 .dataset-search__button--publish {
-  color: var(--color-teal);
+  border-color: rgba(31, 141, 122, 0.28);
+  color: #1f8d7a;
 }
 
 .dataset-search__advanced {
@@ -225,8 +228,8 @@ onBeforeUnmount(() => {
 
 .dataset-search__advanced:disabled {
   cursor: not-allowed;
-  color: #8b98a6;
-  background: #f4f7fa;
+  color: #8a9991;
+  background: #f3f8ee;
   opacity: 0.72;
 }
 
@@ -235,7 +238,7 @@ onBeforeUnmount(() => {
 }
 
 .dataset-search__sort span {
-  color: var(--color-muted);
+  color: #64766d;
   font-size: 13px;
   font-weight: 600;
 }
@@ -243,14 +246,14 @@ onBeforeUnmount(() => {
 .dataset-search__sort select {
   border: 0;
   outline: 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   background: transparent;
   font-weight: 700;
 }
 
 .dataset-search__hint {
   margin: -4px 0 0;
-  color: var(--color-teal);
+  color: #1f8d7a;
   font-size: 13px;
   line-height: 1.5;
 }

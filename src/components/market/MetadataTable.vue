@@ -29,9 +29,9 @@ const rows = computed(() => Object.entries(props.metadata ?? {}))
 <style scoped>
 .metadata-table {
   overflow: hidden;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.16);
   border-radius: 8px;
-  background: var(--color-panel);
+  background: rgba(255, 253, 246, 0.88);
 }
 
 .metadata-table table {
@@ -41,7 +41,7 @@ const rows = computed(() => Object.entries(props.metadata ?? {}))
 }
 
 .metadata-table tr + tr {
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(31, 141, 122, 0.14);
 }
 
 .metadata-table th,
@@ -54,14 +54,14 @@ const rows = computed(() => Object.entries(props.metadata ?? {}))
 
 .metadata-table th {
   width: 32%;
-  color: var(--color-ink-soft);
-  background: var(--color-panel-subtle);
+  color: #30433c;
+  background: rgba(31, 141, 122, 0.08);
   font-size: 13px;
   font-weight: 800;
 }
 
 .metadata-table td {
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 13px;
   overflow-wrap: anywhere;
 }

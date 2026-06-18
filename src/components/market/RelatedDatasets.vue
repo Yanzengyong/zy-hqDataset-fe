@@ -47,15 +47,17 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
 <style scoped>
 .related-datasets {
   padding: 18px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.04);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.97), rgba(247, 251, 241, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 14px 34px rgba(23, 74, 61, 0.07);
 }
 
 .related-datasets h2 {
   margin: 0 0 14px;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 16px;
   line-height: 1.4;
   letter-spacing: 0;
@@ -75,17 +77,19 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
   gap: 10px;
   align-items: center;
   padding: 10px;
-  border: 1px solid rgba(39, 92, 160, 0.12);
+  border: 1px solid rgba(31, 141, 122, 0.14);
   border-radius: 8px;
-  background: #f8fbff;
+  background:
+    linear-gradient(135deg, rgba(31, 141, 122, 0.07), rgba(182, 138, 55, 0.04)),
+    rgba(255, 253, 246, 0.78);
   transition:
     border-color 0.18s ease,
     background 0.18s ease;
 }
 
 .related-datasets__link:hover {
-  border-color: rgba(39, 92, 160, 0.28);
-  background: #ffffff;
+  border-color: rgba(31, 141, 122, 0.3);
+  background: #fffdf6;
 }
 
 .related-datasets__logo {
@@ -93,9 +97,9 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
   width: 42px;
   height: 42px;
   place-items: center;
-  border: 1px solid rgba(39, 92, 160, 0.16);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 7px;
-  color: var(--color-blue-deep);
+  color: #0d675d;
   background: rgba(255, 255, 255, 0.88);
   font-size: 12px;
   font-weight: 800;
@@ -111,7 +115,7 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
 
 .related-datasets__body strong {
   overflow: hidden;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 13px;
   line-height: 1.45;
   text-overflow: ellipsis;
@@ -124,7 +128,7 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
   align-items: center;
   gap: 4px;
   overflow: hidden;
-  color: var(--color-muted);
+  color: #66766f;
   font-size: 12px;
   line-height: 1.4;
   text-overflow: ellipsis;
@@ -132,6 +136,6 @@ const compactDatasets = computed(() => props.datasets.slice(0, 4))
 }
 
 .related-datasets__arrow {
-  color: var(--color-blue);
+  color: #1f8d7a;
 }
 </style>

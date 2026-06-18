@@ -147,17 +147,19 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 
 <style scoped>
 .dataset-tabs {
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.04);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 246, 0.97), rgba(247, 251, 241, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 14px 34px rgba(23, 74, 61, 0.07);
 }
 
 .dataset-tabs__nav {
   display: flex;
   gap: 2px;
   padding: 8px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(31, 141, 122, 0.16);
   overflow-x: auto;
 }
 
@@ -168,7 +170,7 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
   gap: 7px;
   padding: 0 12px;
   border-radius: 6px;
-  color: var(--color-muted);
+  color: #66766f;
   font-size: 13px;
   font-weight: 800;
   white-space: nowrap;
@@ -176,8 +178,8 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 
 .dataset-tabs__tab:hover,
 .dataset-tabs__tab.is-active {
-  color: var(--color-blue-deep);
-  background: rgba(39, 92, 160, 0.09);
+  color: #0d675d;
+  background: rgba(31, 141, 122, 0.1);
 }
 
 .dataset-tabs__panel {
@@ -187,12 +189,12 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 .dataset-tabs__section + .dataset-tabs__section {
   margin-top: 18px;
   padding-top: 18px;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid rgba(31, 141, 122, 0.14);
 }
 
 .dataset-tabs__section h2 {
   margin: 0 0 7px;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 16px;
   line-height: 1.4;
   letter-spacing: 0;
@@ -201,7 +203,7 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 .dataset-tabs__section p,
 .dataset-tabs__empty {
   margin: 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 14px;
   line-height: 1.8;
 }
@@ -213,14 +215,16 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 
 .dataset-tabs__sample {
   padding: 15px;
-  border: 1px solid rgba(39, 92, 160, 0.14);
+  border: 1px solid rgba(31, 141, 122, 0.16);
   border-radius: 8px;
-  background: #f8fbff;
+  background:
+    linear-gradient(135deg, rgba(31, 141, 122, 0.08), rgba(182, 138, 55, 0.04)),
+    rgba(255, 253, 246, 0.76);
 }
 
 .dataset-tabs__sample-index {
   margin-bottom: 10px;
-  color: var(--color-blue-deep);
+  color: #0d675d;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.4;
@@ -239,7 +243,7 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 }
 
 .dataset-tabs__sample dt {
-  color: var(--color-muted);
+  color: #66766f;
   font-size: 12px;
   font-weight: 800;
   line-height: 1.6;
@@ -247,7 +251,7 @@ const sampleRows = computed(() => (props.dataset.samples ?? []).slice(0, 3))
 
 .dataset-tabs__sample dd {
   margin: 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 13px;
   line-height: 1.7;
   overflow-wrap: anywhere;
