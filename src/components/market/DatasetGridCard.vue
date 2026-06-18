@@ -1,19 +1,25 @@
 <script setup>
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { getDatasetCover } from '../../utils/datasetCovers.js'
 
 const props = defineProps({
   dataset: {
     type: Object,
     required: true
+  },
+  imageSrc: {
+    type: String,
+    default: ''
   }
 })
 
-const emit = defineEmits(['toggle-favorite'])
+const imageLoadFailed = ref(false)
 
-const handleToggleFavorite = () => {
-  emit('toggle-favorite', props.dataset.id)
-}
+const cardImageSrc = computed(() => props.imageSrc || props.dataset.imageSrc || '')
+
+watch(cardImageSrc, () => {
+  imageLoadFailed.value = false
+})
 
 const formattedDate = computed(() => {
   if (!props.dataset.updatedAt) return ''
@@ -42,38 +48,35 @@ const formattedDownloads = computed(() => {
 })
 
 const datasetCover = computed(() => getDatasetCover(props.dataset))
+const resolvedImageSrc = computed(() =>
+  !imageLoadFailed.value && cardImageSrc.value ? cardImageSrc.value : datasetCover.value,
+)
 </script>
 
 <template>
   <div class="dataset-grid-card">
     <figure class="dataset-grid-card__cover">
-      <img :src="datasetCover" :alt="`${dataset.name}商品图`" />
+      <img
+        :src="resolvedImageSrc"
+        :alt="`${dataset.name}商品图`"
+        @error="imageLoadFailed = true"
+      />
       <figcaption>{{ dataset.logoText || dataset.name?.charAt(0) }}</figcaption>
     </figure>
 
     <div class="dataset-grid-card__header">
       <div class="dataset-grid-card__info">
         <h3 class="dataset-grid-card__name">{{ dataset.name }}</h3>
-        <p class="dataset-grid-card__provider">{{ dataset.provider }}</p>
       </div>
-      <button
-        class="dataset-grid-card__favorite"
-        :class="{ 'is-active': dataset.isFavorite }"
-        @click.stop="handleToggleFavorite"
-      >
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-        </svg>
-      </button>
     </div>
 
     <div class="dataset-grid-card__body">
       <p class="dataset-grid-card__summary">{{ dataset.summary }}</p>
-      
+
       <div class="dataset-grid-card__tags">
-        <span 
-          v-for="tag in dataset.tags?.slice(0, 3)" 
-          :key="tag" 
+        <span
+          v-for="tag in dataset.tags?.slice(0, 3)"
+          :key="tag"
           class="dataset-grid-card__tag"
         >
           {{ tag }}
@@ -84,7 +87,7 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
     <div class="dataset-grid-card__footer">
       <div class="dataset-grid-card__meta">
         <span class="dataset-grid-card__meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
             <polyline points="7 10 12 15 17 10"></polyline>
             <line x1="12" y1="15" x2="12" y2="3"></line>
@@ -92,7 +95,7 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
           {{ formattedDownloads }}
         </span>
         <span class="dataset-grid-card__meta-item">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <rect x="2" y="2" width="20" height="20" rx="2" ry="2"></rect>
             <line x1="2" y1="10" x2="22" y2="10"></line>
             <line x1="10" y1="2" x2="10" y2="22"></line>
@@ -125,7 +128,7 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
 
   &__cover {
     position: relative;
-    height: 128px;
+    aspect-ratio: 1 / 0.68;
     margin: 0 0 14px;
     overflow: hidden;
     border: 1px solid rgba(31, 141, 122, 0.18);
@@ -137,7 +140,7 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
       display: block;
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       transition: transform 0.35s ease;
     }
 
@@ -204,39 +207,8 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
     color: #66766f;
   }
 
-  &__favorite {
-    width: 32px;
-    height: 32px;
-    border: none;
-    background: none;
-    cursor: pointer;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #87958e;
-    transition: all 0.2s ease;
-
-    svg {
-      width: 18px;
-      height: 18px;
-    }
-
-    &:hover {
-      color: #ef4444;
-      transform: scale(1.1);
-    }
-
-    &.is-active {
-      color: #ef4444;
-
-      svg {
-        fill: #ef4444;
-      }
-    }
-  }
-
   &__body {
+    padding: 0 20px;
     margin-bottom: 16px;
     min-width: 0;
   }

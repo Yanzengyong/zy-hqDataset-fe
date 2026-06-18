@@ -3,7 +3,7 @@ import { computed, onMounted, ref, watch } from 'vue'
 import DatasetGridCard from '../components/market/DatasetGridCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import EmptyState from '../components/common/EmptyState.vue'
-import { getDatasetsByCategory, toggleFavorite } from '../services/mockApi.js'
+import { getDatasetsByCategory } from '../services/mockApi.js'
 import homeBackground from '../assets/home/tcm-home-bg.png'
 import marketCardImage from '../assets/market/tcm-market-card-bg.png'
 import marketHeroImage from '../assets/market/tcm-market-hero.png'
@@ -18,6 +18,17 @@ const tabs = [
   { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage },
 ]
 
+const productImageSeries = {
+  herb: 30,
+  classic: 40,
+  clinical: 50
+}
+
+const getProductImageSrc = (index) => {
+  const startNo = productImageSeries[activeTab.value] ?? productImageSeries.herb
+  return `/images/list/item-${startNo + index}.png`
+}
+
 const activeTabBg = computed(() => {
   const tab = tabs.find(t => t.key === activeTab.value)
   return tab ? `url(${tab.bg})` : 'none'
@@ -30,15 +41,6 @@ const loadDatasets = async () => {
   } finally {
     loading.value = false
   }
-}
-
-const handleToggleFavorite = async (id) => {
-  const updatedDataset = await toggleFavorite(id)
-  if (!updatedDataset) return
-  
-  datasets.value = datasets.value.map(dataset => 
-    dataset.id === id ? updatedDataset : dataset
-  )
 }
 
 onMounted(loadDatasets)
@@ -59,7 +61,6 @@ watch(activeTab, loadDatasets)
         <p class="sub-title">赋能大模型的预训练、微调和评测</p>
       </div>
       <div class="content-wrapper">
-
         <div class="header-section">
           <img src="/images/index-00.png" alt="" class="welcome-video" />
         </div>
@@ -74,6 +75,7 @@ watch(activeTab, loadDatasets)
           :key="tab.key"
           class="content-product__tab"
           :class="{ 'is-active': activeTab === tab.key }"
+          type="button"
           @click="activeTab = tab.key"
         >
           {{ tab.label }}
@@ -81,30 +83,26 @@ watch(activeTab, loadDatasets)
       </div>
 
       <div class="content-product__panel">
-        
         <div v-if="loading" class="content-product__loading">
           <LoadingState text="正在载入数据集..." />
         </div>
-        
+
         <EmptyState
           v-else-if="!datasets.length"
           title="暂无数据集"
           description="该类别下暂无数据集，请切换其他类别查看。"
         />
-        
+
         <div v-else class="content-product__list">
           <DatasetGridCard
-            v-for="dataset in datasets"
+            v-for="(dataset, index) in datasets"
             :key="dataset.id"
             :dataset="dataset"
-            @toggle-favorite="handleToggleFavorite"
+            :image-src="getProductImageSrc(index)"
           />
         </div>
-
       </div>
-
     </div>
-
   </div>
 </template>
 
