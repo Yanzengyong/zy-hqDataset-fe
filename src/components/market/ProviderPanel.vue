@@ -51,15 +51,17 @@ const details = computed(() => [
 <style scoped>
 .provider-panel {
   padding: 18px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.04);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.97), rgba(247, 251, 241, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 14px 34px rgba(23, 74, 61, 0.07);
 }
 
 .provider-panel h2 {
   margin: 0 0 14px;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 16px;
   line-height: 1.4;
   letter-spacing: 0;
@@ -80,7 +82,7 @@ const details = computed(() => [
   align-items: center;
   gap: 6px;
   margin: 0 0 5px;
-  color: var(--color-muted);
+  color: #66766f;
   font-size: 12px;
   font-weight: 800;
   line-height: 1.35;
@@ -88,7 +90,7 @@ const details = computed(() => [
 
 .provider-panel dd {
   margin: 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.6;

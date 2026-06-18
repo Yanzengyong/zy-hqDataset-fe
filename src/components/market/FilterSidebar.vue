@@ -64,10 +64,12 @@ defineEmits({
 <style scoped>
 .filter-sidebar {
   padding: 18px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 10px 28px rgba(24, 36, 51, 0.05);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 246, 0.96), rgba(247, 251, 241, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 12px 28px rgba(23, 74, 61, 0.06);
 }
 
 .filter-sidebar__header {
@@ -76,12 +78,12 @@ defineEmits({
   justify-content: space-between;
   gap: 12px;
   padding-bottom: 14px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1px solid rgba(31, 141, 122, 0.16);
 }
 
 .filter-sidebar__header h2 {
   margin: 0;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 16px;
   line-height: 1.4;
   letter-spacing: 0;
@@ -92,7 +94,7 @@ defineEmits({
 .filter-sidebar__tag {
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: #ffffff;
+  background: rgba(255, 253, 246, 0.95);
   transition:
     border-color 0.18s ease,
     background-color 0.18s ease,
@@ -103,7 +105,7 @@ defineEmits({
 .filter-sidebar__all {
   flex: 0 0 auto;
   padding: 5px 10px;
-  color: var(--color-muted);
+  color: #60746a;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.4;
@@ -124,7 +126,7 @@ defineEmits({
   width: 100%;
   min-width: 0;
   padding: 8px 10px;
-  color: var(--color-ink-soft);
+  color: #2f463d;
   font-size: 14px;
   font-weight: 700;
   line-height: 1.4;
@@ -141,12 +143,13 @@ defineEmits({
 .filter-sidebar__tag {
   min-width: 0;
   padding: 5px 9px;
-  color: var(--color-muted);
+  color: #62766c;
   font-size: 12px;
   font-weight: 600;
   line-height: 1.35;
   overflow-wrap: anywhere;
-  box-shadow: 0 4px 10px rgba(24, 36, 51, 0.04);
+  background: linear-gradient(135deg, rgba(31, 141, 122, 0.08), rgba(182, 138, 55, 0.04));
+  box-shadow: 0 4px 10px rgba(23, 74, 61, 0.04);
 }
 
 .filter-sidebar__all:hover,
@@ -155,10 +158,10 @@ defineEmits({
 .filter-sidebar__all.is-active,
 .filter-sidebar__group-title.is-active,
 .filter-sidebar__tag.is-active {
-  border-color: rgba(39, 92, 160, 0.28);
-  color: var(--color-blue-deep);
-  background: rgba(39, 92, 160, 0.08);
-  box-shadow: inset 0 0 0 1px rgba(39, 92, 160, 0.04);
+  border-color: rgba(31, 141, 122, 0.32);
+  color: #0d675d;
+  background: rgba(31, 141, 122, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(31, 141, 122, 0.04);
 }
 
 @media (max-width: 900px) {

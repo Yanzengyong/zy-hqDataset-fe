@@ -9,6 +9,7 @@ import DatasetSummary from '../components/market/DatasetSummary.vue'
 import DatasetTabs from '../components/market/DatasetTabs.vue'
 import ProviderPanel from '../components/market/ProviderPanel.vue'
 import RelatedDatasets from '../components/market/RelatedDatasets.vue'
+import marketHeroImage from '../assets/market/tcm-market-hero.png'
 import {
   getDatasetDetail,
   getRelatedDatasets,
@@ -136,7 +137,10 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <section class="dataset-detail">
+  <section
+    class="dataset-detail"
+    :style="{ '--detail-bg-image': `url(${marketHeroImage})` }"
+  >
     <header class="dataset-detail__header">
       <Breadcrumb :items="breadcrumbItems" />
     </header>
@@ -196,13 +200,29 @@ onUnmounted(() => {
 
 <style scoped>
 .dataset-detail {
+  --color-blue: #218a79;
+  --color-blue-deep: #0d675d;
+  --color-teal: #1f8d7a;
+  --color-green: #4b7d3a;
+  --color-gold: #b68a37;
+  --color-border: #d5e3d8;
+  --color-border-strong: #afcbb8;
+  --color-panel: #fffdf6;
+  --color-panel-subtle: #f3f8ee;
+  --color-muted: #66766f;
   display: grid;
   gap: 16px;
-  min-height: calc(100vh - 132px);
+  min-height: calc(100vh - 80px);
   height: calc(100vh - 80px);
+  padding: 16px 24px 24px;
   overflow-y: auto;
   scrollbar-width: thin;
-  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
+  scrollbar-color: rgba(31, 141, 122, 0.32) transparent;
+  background:
+    linear-gradient(180deg, rgba(237, 245, 239, 0.92), rgba(237, 245, 239, 0.78)),
+    linear-gradient(90deg, rgba(237, 245, 239, 0.92) 0%, rgba(237, 245, 239, 0.76) 48%, rgba(237, 245, 239, 0.58) 100%),
+    var(--detail-bg-image) center / cover no-repeat,
+    #edf5ef;
 }
 
 .dataset-detail::-webkit-scrollbar {
@@ -214,16 +234,16 @@ onUnmounted(() => {
 }
 
 .dataset-detail::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 92, 160, 0.3);
+  background-color: rgba(31, 141, 122, 0.32);
   border-radius: 3px;
 }
 
 .dataset-detail::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(39, 92, 160, 0.55);
+  background-color: rgba(31, 141, 122, 0.55);
 }
 
 .dataset-detail::-webkit-scrollbar-thumb:active {
-  background-color: rgba(39, 92, 160, 0.75);
+  background-color: rgba(31, 141, 122, 0.75);
 }
 
 .dataset-detail__header {
@@ -235,10 +255,12 @@ onUnmounted(() => {
   display: grid;
   min-height: 320px;
   place-items: center;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.05);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 246, 0.96), rgba(244, 250, 240, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 14px 34px rgba(23, 74, 61, 0.07);
 }
 
 .dataset-detail__layout {
@@ -262,10 +284,12 @@ onUnmounted(() => {
 
 .dataset-detail__document {
   padding: 20px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  background: var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.04);
+  background:
+    linear-gradient(135deg, rgba(255, 253, 246, 0.97), rgba(247, 251, 241, 0.94)),
+    var(--color-panel);
+  box-shadow: 0 14px 34px rgba(23, 74, 61, 0.07);
 }
 
 .dataset-detail__document-header {
@@ -278,7 +302,7 @@ onUnmounted(() => {
 
 .dataset-detail__document-eyebrow {
   margin: 0 0 5px;
-  color: var(--color-teal);
+  color: #1f8d7a;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.4;
@@ -286,7 +310,7 @@ onUnmounted(() => {
 
 .dataset-detail__document h2 {
   margin: 0;
-  color: var(--color-ink);
+  color: #173f36;
   font-size: 17px;
   line-height: 1.4;
   letter-spacing: 0;
@@ -299,18 +323,18 @@ onUnmounted(() => {
   justify-content: center;
   gap: 7px;
   padding: 0 12px;
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(31, 141, 122, 0.2);
   border-radius: 6px;
-  color: var(--color-blue-deep);
-  background: rgba(39, 92, 160, 0.08);
+  color: #0d675d;
+  background: rgba(31, 141, 122, 0.09);
   font-size: 13px;
   font-weight: 800;
   white-space: nowrap;
 }
 
 .dataset-detail__document-button:hover:not(:disabled) {
-  border-color: rgba(39, 92, 160, 0.28);
-  background: rgba(39, 92, 160, 0.12);
+  border-color: rgba(31, 141, 122, 0.3);
+  background: rgba(31, 141, 122, 0.14);
 }
 
 .dataset-detail__document-button:disabled {
@@ -323,15 +347,17 @@ onUnmounted(() => {
   gap: 12px;
   align-items: start;
   padding: 16px;
-  border: 1px dashed rgba(39, 92, 160, 0.25);
+  border: 1px dashed rgba(31, 141, 122, 0.28);
   border-radius: 8px;
-  color: var(--color-blue-deep);
-  background: #f8fbff;
+  color: #0d675d;
+  background:
+    linear-gradient(135deg, rgba(31, 141, 122, 0.08), rgba(182, 138, 55, 0.05)),
+    rgba(255, 253, 246, 0.78);
 }
 
 .dataset-detail__document-preview p {
   margin: 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 14px;
   line-height: 1.8;
 }

@@ -1,7 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue'
 import {
-  Building2,
   Clock3,
   Database,
   Download,
@@ -11,6 +10,7 @@ import {
 } from 'lucide-vue-next'
 import TagBadge from '../common/TagBadge.vue'
 import { simulateDownload } from '../../services/mockApi.js'
+import { getDatasetCover } from '../../utils/datasetCovers.js'
 
 const props = defineProps({
   dataset: {
@@ -45,11 +45,6 @@ const metrics = computed(() => [
     icon: Layers3,
   },
   {
-    label: '提供方',
-    value: props.dataset.provider,
-    icon: Building2,
-  },
-  {
     label: '下载',
     value: formattedDownloads.value,
     icon: Download,
@@ -65,6 +60,8 @@ const metrics = computed(() => [
     icon: Clock3,
   },
 ])
+
+const datasetCover = computed(() => getDatasetCover(props.dataset))
 
 const downloadDataset = async () => {
   if (downloading.value) {
@@ -87,16 +84,18 @@ const downloadDataset = async () => {
 
 <template>
   <section class="dataset-summary" aria-labelledby="dataset-summary-title">
-    <div class="dataset-summary__logo" aria-hidden="true">
-      {{ dataset.logoText }}
-    </div>
+    <figure class="dataset-summary__cover">
+      <img :src="datasetCover" :alt="`${dataset.name}商品图`" />
+      <figcaption>{{ dataset.logoText }}</figcaption>
+    </figure>
 
     <div class="dataset-summary__body">
       <div class="dataset-summary__header">
         <div class="dataset-summary__title-group">
-          <p class="dataset-summary__eyebrow">{{ dataset.category }} · {{ dataset.taskType }}</p>
+          <p class="dataset-summary__eyebrow">数据商品 · {{ dataset.category }} · {{ dataset.taskType }}</p>
           <h1 id="dataset-summary-title">{{ dataset.name }}</h1>
           <p class="dataset-summary__summary">{{ dataset.summary }}</p>
+          <p class="dataset-summary__provider">提供方：{{ dataset.provider }}</p>
         </div>
 
         <div class="dataset-summary__actions">
@@ -148,33 +147,79 @@ const downloadDataset = async () => {
 
 <style scoped>
 .dataset-summary {
+  position: relative;
+  isolation: isolate;
   display: grid;
-  grid-template-columns: 92px minmax(0, 1fr);
-  gap: 18px;
-  padding: 22px;
-  border: 1px solid rgba(39, 92, 160, 0.16);
+  grid-template-columns: minmax(230px, 28%) minmax(0, 1fr);
+  gap: 22px;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
   background:
-    linear-gradient(135deg, rgba(39, 92, 160, 0.08), rgba(18, 127, 132, 0.04)),
-    var(--color-panel);
-  box-shadow: 0 12px 30px rgba(24, 36, 51, 0.05);
+    linear-gradient(135deg, rgba(31, 141, 122, 0.13), rgba(255, 253, 246, 0.9) 44%, rgba(247, 251, 239, 0.96)),
+    var(--color-panel, #fffdf6);
+  box-shadow:
+    0 16px 36px rgba(23, 74, 61, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
-.dataset-summary__logo {
-  display: grid;
-  width: 92px;
-  height: 92px;
-  place-items: center;
-  border: 1px solid rgba(39, 92, 160, 0.2);
-  border-radius: 8px;
-  color: var(--color-blue-deep);
+.dataset-summary::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background:
-    linear-gradient(145deg, rgba(255, 255, 255, 0.94), rgba(224, 235, 247, 0.9)),
-    #ffffff;
-  font-size: 19px;
+    linear-gradient(115deg, transparent 0 42%, rgba(255, 255, 255, 0.28) 42% 53%, transparent 53% 100%),
+    linear-gradient(90deg, rgba(182, 138, 55, 0.08) 0 1px, transparent 1px 100%);
+  background-size: auto, 34px 34px;
+  content: "";
+  opacity: 0.45;
+}
+
+.dataset-summary__cover {
+  position: relative;
+  min-height: 224px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(31, 141, 122, 0.18);
+  border-radius: 8px;
+  background: #eef7ef;
+  box-shadow: 0 10px 24px rgba(23, 74, 61, 0.08);
+}
+
+.dataset-summary__cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 224px;
+  object-fit: cover;
+}
+
+.dataset-summary__cover::after {
+  position: absolute;
+  inset: auto 0 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent, rgba(6, 47, 43, 0.5));
+  content: "";
+}
+
+.dataset-summary__cover figcaption {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  z-index: 1;
+  max-width: calc(100% - 28px);
+  padding: 5px 10px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  border-radius: 6px;
+  color: #ffffff;
+  background: rgba(13, 103, 93, 0.7);
+  backdrop-filter: blur(6px);
+  font-size: 13px;
   font-weight: 800;
-  line-height: 1.25;
-  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dataset-summary__body,
@@ -184,7 +229,8 @@ const downloadDataset = async () => {
 
 .dataset-summary__body {
   display: grid;
-  gap: 14px;
+  align-content: center;
+  gap: 16px;
 }
 
 .dataset-summary__header {
@@ -196,7 +242,7 @@ const downloadDataset = async () => {
 
 .dataset-summary__eyebrow {
   margin: 0 0 7px;
-  color: var(--color-teal);
+  color: #1f8d7a;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.4;
@@ -204,17 +250,25 @@ const downloadDataset = async () => {
 
 .dataset-summary h1 {
   margin: 0;
-  color: var(--color-ink);
-  font-size: 26px;
+  color: #173f36;
+  font-size: 30px;
   line-height: 1.25;
   letter-spacing: 0;
 }
 
 .dataset-summary__summary {
   margin: 8px 0 0;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 14px;
   line-height: 1.75;
+}
+
+.dataset-summary__provider {
+  margin: 8px 0 0;
+  color: #60746a;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
 }
 
 .dataset-summary__actions {
@@ -232,7 +286,7 @@ const downloadDataset = async () => {
   justify-content: center;
   border: 1px solid var(--color-border);
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 253, 246, 0.94);
   transition:
     border-color 0.18s ease,
     background 0.18s ease,
@@ -256,16 +310,16 @@ const downloadDataset = async () => {
   gap: 7px;
   padding: 0 13px;
   color: #ffffff;
-  background: var(--color-blue);
-  border-color: var(--color-blue);
+  background: linear-gradient(135deg, #1f8d7a, #0d675d);
+  border-color: rgba(31, 141, 122, 0.3);
   font-size: 13px;
   font-weight: 800;
   white-space: nowrap;
 }
 
 .dataset-summary__download:hover:not(:disabled) {
-  background: var(--color-blue-deep);
-  border-color: var(--color-blue-deep);
+  background: linear-gradient(135deg, #239a84, #0b5d53);
+  border-color: rgba(31, 141, 122, 0.4);
 }
 
 .dataset-summary__download:disabled {
@@ -280,15 +334,17 @@ const downloadDataset = async () => {
 
 .dataset-summary__metrics {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px 14px;
   margin: 0;
 }
 
 .dataset-summary__metrics div {
   min-width: 0;
-  padding-top: 10px;
-  border-top: 1px solid rgba(39, 92, 160, 0.13);
+  padding: 10px;
+  border: 1px solid rgba(31, 141, 122, 0.14);
+  border-radius: 8px;
+  background: rgba(255, 253, 246, 0.72);
 }
 
 .dataset-summary__metrics dt {
@@ -296,7 +352,7 @@ const downloadDataset = async () => {
   align-items: center;
   gap: 5px;
   margin: 0 0 4px;
-  color: var(--color-muted);
+  color: #6f8078;
   font-size: 12px;
   font-weight: 700;
   line-height: 1.35;
@@ -305,7 +361,7 @@ const downloadDataset = async () => {
 .dataset-summary__metrics dd {
   margin: 0;
   overflow: hidden;
-  color: var(--color-ink-soft);
+  color: #30433c;
   font-size: 13px;
   font-weight: 800;
   line-height: 1.45;
@@ -319,10 +375,9 @@ const downloadDataset = async () => {
     padding: 18px;
   }
 
-  .dataset-summary__logo {
-    width: 70px;
-    height: 70px;
-    font-size: 16px;
+  .dataset-summary__cover,
+  .dataset-summary__cover img {
+    min-height: 190px;
   }
 
   .dataset-summary__header {
