@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue'
+import { getDatasetCover } from '../../utils/datasetCovers.js'
 
 const props = defineProps({
   dataset: {
@@ -39,14 +40,18 @@ const formattedDownloads = computed(() => {
   if (downloads >= 1000) return `${(downloads / 1000).toFixed(1)}k`
   return downloads.toString()
 })
+
+const datasetCover = computed(() => getDatasetCover(props.dataset))
 </script>
 
 <template>
   <div class="dataset-grid-card">
+    <figure class="dataset-grid-card__cover">
+      <img :src="datasetCover" :alt="`${dataset.name}商品图`" />
+      <figcaption>{{ dataset.logoText || dataset.name?.charAt(0) }}</figcaption>
+    </figure>
+
     <div class="dataset-grid-card__header">
-      <div class="dataset-grid-card__logo">
-        <span class="dataset-grid-card__logo-text">{{ dataset.logoText || dataset.name?.charAt(0) }}</span>
-      </div>
       <div class="dataset-grid-card__info">
         <h3 class="dataset-grid-card__name">{{ dataset.name }}</h3>
         <p class="dataset-grid-card__provider">{{ dataset.provider }}</p>
@@ -107,7 +112,7 @@ const formattedDownloads = computed(() => {
     #fffdf6;
   border: 1px solid rgba(31, 141, 122, 0.18);
   border-radius: 8px;
-  padding: 20px;
+  padding: 14px 16px 18px;
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 10px 24px rgba(23, 74, 61, 0.06);
@@ -118,31 +123,63 @@ const formattedDownloads = computed(() => {
     border-color: rgba(31, 141, 122, 0.36);
   }
 
+  &__cover {
+    position: relative;
+    height: 128px;
+    margin: 0 0 14px;
+    overflow: hidden;
+    border: 1px solid rgba(31, 141, 122, 0.18);
+    border-radius: 8px;
+    background: #eef7ef;
+    box-shadow: inset 0 -18px 28px rgba(31, 141, 122, 0.1);
+
+    img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s ease;
+    }
+
+    &::after {
+      position: absolute;
+      inset: auto 0 0;
+      height: 44%;
+      background: linear-gradient(180deg, transparent, rgba(6, 47, 43, 0.48));
+      content: '';
+      pointer-events: none;
+    }
+
+    figcaption {
+      position: absolute;
+      left: 10px;
+      bottom: 10px;
+      z-index: 1;
+      max-width: calc(100% - 20px);
+      padding: 4px 8px;
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.32);
+      border-radius: 6px;
+      color: #ffffff;
+      background: rgba(13, 103, 93, 0.72);
+      backdrop-filter: blur(6px);
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &:hover &__cover img {
+    transform: scale(1.035);
+  }
+
   &__header {
     display: flex;
     align-items: flex-start;
     gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  &__logo {
-    width: 48px;
-    height: 48px;
-    border: 1px solid rgba(31, 141, 122, 0.2);
-    border-radius: 8px;
-    background:
-      radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.88), transparent 36%),
-      linear-gradient(135deg, #2aa28a 0%, #0d675d 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  &__logo-text {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 600;
+    margin-bottom: 14px;
   }
 
   &__info {
@@ -201,17 +238,19 @@ const formattedDownloads = computed(() => {
 
   &__body {
     margin-bottom: 16px;
+    min-width: 0;
   }
 
   &__summary {
+    display: block;
+    max-width: 100%;
     margin: 0 0 12px;
     font-size: 14px;
     color: #30433c;
     line-height: 1.6;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__tags {
