@@ -69,7 +69,7 @@ const isActive = (path) => {
   z-index: 100;
   width: 100%;
   height: 80px;
-  background: rgba(255, 255, 255, 0.85);
+  background: url('/images/head-01.png') center / cover no-repeat;
   border-bottom: 1px solid var(--color-border);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
