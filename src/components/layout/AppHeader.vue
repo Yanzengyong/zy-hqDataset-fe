@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
+import marketCardImage from '../../assets/market/tcm-market-card-bg.png'
 
 const route = useRoute()
 
@@ -28,7 +29,10 @@ const isActive = (path) => {
 </script>
 
 <template>
-  <header class="app-header">
+  <header
+    class="app-header"
+    :style="{ '--header-bg-image': `url(${marketCardImage})` }"
+  >
     <div class="app-header__inner">
       <RouterLink class="app-header__brand" to="/">
         <span class="app-header__brand-mark" aria-hidden="true">
@@ -69,11 +73,14 @@ const isActive = (path) => {
   z-index: 100;
   width: 100%;
   height: 80px;
-  background: url('/images/head-01.png') center / cover no-repeat;
-  border-bottom: 1px solid var(--color-border);
+  background:
+    linear-gradient(90deg, rgba(255, 253, 246, 0.9) 0%, rgba(237, 245, 239, 0.82) 52%, rgba(237, 245, 239, 0.68) 100%),
+    var(--header-bg-image) center / cover no-repeat,
+    #edf5ef;
+  border-bottom: 1px solid rgba(31, 141, 122, 0.18);
   backdrop-filter: blur(16px) saturate(1.4);
   -webkit-backdrop-filter: blur(16px) saturate(1.4);
-  box-shadow: 0 1px 0 rgba(24, 36, 51, 0.02), 0 2px 12px rgba(24, 36, 51, 0.04);
+  box-shadow: 0 1px 0 rgba(23, 74, 61, 0.04), 0 6px 18px rgba(23, 74, 61, 0.07);
 }
 
 .app-header__inner {
@@ -97,7 +104,7 @@ const isActive = (path) => {
   font-size: 30px;
   font-weight: 700;
   line-height: 1.2;
-  letter-spacing: -0.01em;
+  letter-spacing: 0;
   flex-shrink: 0;
 }
 
@@ -109,8 +116,8 @@ const isActive = (path) => {
   width: 38px;
   height: 38px;
   border-radius: 9px;
-  background: linear-gradient(135deg, var(--color-blue), var(--color-blue-deep));
-  box-shadow: 0 4px 12px rgba(39, 92, 160, 0.32);
+  background: linear-gradient(135deg, #1f8d7a, #0d675d);
+  box-shadow: 0 4px 12px rgba(31, 141, 122, 0.28);
   flex-shrink: 0;
 }
 
@@ -166,13 +173,14 @@ const isActive = (path) => {
 }
 
 .app-header__nav-link:hover {
-  color: var(--color-ink);
-  background: var(--color-panel-subtle);
+  color: #173f36;
+  background: rgba(255, 253, 246, 0.62);
 }
 
 .app-header__nav-link.is-active {
-  color: var(--color-blue-deep);
-  background: rgba(39, 92, 160, 0.08);
+  color: #0d675d;
+  background: rgba(31, 141, 122, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(31, 141, 122, 0.16);
   font-weight: 600;
 }
 

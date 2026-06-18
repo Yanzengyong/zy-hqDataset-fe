@@ -4,15 +4,18 @@ import DatasetGridCard from '../components/market/DatasetGridCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import EmptyState from '../components/common/EmptyState.vue'
 import { getDatasetsByCategory, toggleFavorite } from '../services/mockApi.js'
+import homeBackground from '../assets/home/tcm-home-bg.png'
+import marketCardImage from '../assets/market/tcm-market-card-bg.png'
+import marketHeroImage from '../assets/market/tcm-market-hero.png'
 
 const activeTab = ref('herb')
 const datasets = ref([])
 const loading = ref(true)
 
 const tabs = [
-  { key: 'herb', label: '药材数据集', bg: '/images/zyy-01.png' },
-  { key: 'classic', label: '古籍数据集', bg: '/images/zyy-02.png' },
-  { key: 'clinical', label: '诊疗数据集', bg: '/images/zyy-03.png' },
+  { key: 'herb', label: '药材数据集', bg: marketCardImage },
+  { key: 'classic', label: '古籍数据集', bg: homeBackground },
+  { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage },
 ]
 
 const activeTabBg = computed(() => {
@@ -45,7 +48,10 @@ watch(activeTab, loadDatasets)
 
 <template>
   <!-- <AnimatedBackground /> -->
-  <div class="home-content page-scrollbar">
+  <div
+    class="home-content page-scrollbar"
+    :style="{ '--home-bg-image': `url(${homeBackground})` }"
+  >
 
     <div class="header-box">
       <div class="header-title">
@@ -107,20 +113,25 @@ watch(activeTab, loadDatasets)
   height: calc(100vh - 80px);
   overflow-y: scroll;
   overflow-x: hidden;
-  background-image: url('/images/index-05.png');
-  background-repeat: no-repeat;
-  background-position: top right;
-  background-size: 100% 500px;
   position: relative;
+  background:
+    linear-gradient(180deg, rgba(237, 245, 239, 0.86), rgba(237, 245, 239, 0.74)),
+    linear-gradient(90deg, rgba(255, 253, 246, 0.88), rgba(237, 245, 239, 0.64)),
+    var(--home-bg-image) top center / 100% 680px no-repeat,
+    #edf5ef;
 }
 
 .header-box {
+  position: relative;
+  overflow: hidden;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.7);
+    background:
+      linear-gradient(180deg, rgba(255, 253, 246, 0.48), rgba(255, 253, 246, 0.7)),
+      radial-gradient(720px 220px at 50% 14%, rgba(31, 141, 122, 0.14), transparent 70%);
     z-index: 0;
   }
 
@@ -143,7 +154,8 @@ watch(activeTab, loadDatasets)
   animation: slideDown 0.8s ease-out;
   width: 100%;
   text-align: center;
-  background: rgba(255, 255, 255, 0.7);
+  background: transparent;
+  margin-bottom: 40px;
 }
 
 .header-title {
@@ -153,13 +165,13 @@ watch(activeTab, loadDatasets)
     line-height: 7rem;
     height: 7rem;
     font-weight: 700;
-    color: #4b4b4b;
+    color: #173f36;
   }
 
   .sub-title {
     font-size: 1.3rem;
     line-height: 2rem;
-    color: #838383;
+    color: #60746a;
   }
 }
 
@@ -168,26 +180,30 @@ watch(activeTab, loadDatasets)
   width: 80%;
   margin: 0 auto;
   opacity: 1;
-  background: rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  background: rgba(255, 253, 246, 0.44);
+  box-shadow: 0 18px 42px rgba(23, 74, 61, 0.08);
 }
 
 .content-product {
-  margin-top: 30px;
   position: relative;
   z-index: 2;
   overflow: hidden;
   padding: 100px 15% 20px;
   text-align: center;
   background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 100% auto;
+  background-position: center;
+  background-size: cover;
+  background-attachment: local;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: rgba(255, 255, 255, 0.8);
+    background:
+      linear-gradient(180deg, rgba(255, 253, 246, 0.82), rgba(237, 245, 239, 0.78)),
+      radial-gradient(760px 220px at 50% 10%, rgba(182, 138, 55, 0.08), transparent 70%);
     pointer-events: none;
   }
 
@@ -200,7 +216,7 @@ watch(activeTab, loadDatasets)
     margin: 0 0 60px;
     font-size: 40px;
     font-weight: 700;
-    color: var(--color-ink);
+    color: #173f36;
   }
 
   &__tabs {
@@ -212,24 +228,26 @@ watch(activeTab, loadDatasets)
 
   &__tab {
     padding: 10px 24px;
-    border: 1px solid var(--color-border);
+    border: 1px solid rgba(31, 141, 122, 0.18);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.4);
-    color: var(--color-muted);
+    background: rgba(255, 253, 246, 0.62);
+    color: #66766f;
     font-size: 20px;
     font-weight: 500;
     cursor: pointer;
     transition: all 200ms ease;
 
     &:hover {
-      color: var(--color-ink);
-      border-color: var(--color-border-strong);
+      color: #173f36;
+      border-color: rgba(31, 141, 122, 0.32);
+      background: rgba(255, 253, 246, 0.84);
     }
 
     &.is-active {
-      color: var(--color-blue-deep);
-      background: rgba(234, 234, 235, 0.5);
-      border-color: rgba(39, 92, 160, 0.3);
+      color: #0d675d;
+      background: rgba(31, 141, 122, 0.12);
+      border-color: rgba(31, 141, 122, 0.35);
+      box-shadow: inset 0 0 0 1px rgba(31, 141, 122, 0.06);
       font-weight: 600;
     }
   }

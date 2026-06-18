@@ -102,17 +102,20 @@ const formattedDownloads = computed(() => {
 
 <style lang="scss" scoped>
 .dataset-grid-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  background:
+    linear-gradient(135deg, rgba(31, 141, 122, 0.1), rgba(255, 253, 246, 0.92) 48%, rgba(247, 251, 239, 0.96)),
+    #fffdf6;
+  border: 1px solid rgba(31, 141, 122, 0.18);
+  border-radius: 8px;
   padding: 20px;
   transition: all 0.3s ease;
   cursor: pointer;
+  box-shadow: 0 10px 24px rgba(23, 74, 61, 0.06);
 
   &:hover {
     transform: translateY(-4px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
-    border-color: #3b82f6;
+    box-shadow: 0 14px 30px rgba(23, 74, 61, 0.1);
+    border-color: rgba(31, 141, 122, 0.36);
   }
 
   &__header {
@@ -125,8 +128,11 @@ const formattedDownloads = computed(() => {
   &__logo {
     width: 48px;
     height: 48px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+    border: 1px solid rgba(31, 141, 122, 0.2);
+    border-radius: 8px;
+    background:
+      radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.88), transparent 36%),
+      linear-gradient(135deg, #2aa28a 0%, #0d675d 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -148,7 +154,7 @@ const formattedDownloads = computed(() => {
     margin: 0 0 4px;
     font-size: 16px;
     font-weight: 600;
-    color: #111827;
+    color: #173f36;
     line-height: 1.4;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -158,7 +164,7 @@ const formattedDownloads = computed(() => {
   &__provider {
     margin: 0;
     font-size: 13px;
-    color: #6b7280;
+    color: #66766f;
   }
 
   &__favorite {
@@ -171,7 +177,7 @@ const formattedDownloads = computed(() => {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #9ca3af;
+    color: #87958e;
     transition: all 0.2s ease;
 
     svg {
@@ -200,7 +206,7 @@ const formattedDownloads = computed(() => {
   &__summary {
     margin: 0 0 12px;
     font-size: 14px;
-    color: #4b5563;
+    color: #30433c;
     line-height: 1.6;
     display: -webkit-box;
     -webkit-line-clamp: 2;
@@ -216,10 +222,11 @@ const formattedDownloads = computed(() => {
 
   &__tag {
     padding: 4px 10px;
-    background: #f3f4f6;
+    border: 1px solid rgba(31, 141, 122, 0.16);
+    background: rgba(31, 141, 122, 0.08);
     border-radius: 6px;
     font-size: 12px;
-    color: #6b7280;
+    color: #0d675d;
   }
 
   &__footer {
@@ -227,7 +234,7 @@ const formattedDownloads = computed(() => {
     align-items: center;
     justify-content: space-between;
     padding-top: 16px;
-    border-top: 1px solid #f3f4f6;
+    border-top: 1px solid rgba(31, 141, 122, 0.14);
   }
 
   &__meta {
@@ -241,7 +248,7 @@ const formattedDownloads = computed(() => {
     align-items: center;
     gap: 4px;
     font-size: 13px;
-    color: #9ca3af;
+    color: #66766f;
 
     svg {
       width: 14px;
@@ -251,7 +258,7 @@ const formattedDownloads = computed(() => {
 
   &__date {
     font-size: 12px;
-    color: #9ca3af;
+    color: #66766f;
   }
 }
 </style>
