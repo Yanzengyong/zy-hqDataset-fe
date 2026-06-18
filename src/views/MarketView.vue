@@ -141,8 +141,10 @@ watch([keyword, activeCategory, sort], () => {
 .market-view {
   display: grid;
   gap: 18px;
+  box-sizing: border-box;
   min-height: calc(100vh - 80px - 48px);
   height: calc(100vh - 80px);
+  padding: 24px;
   overflow-y: auto;
   scrollbar-width: thin;
   scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
@@ -266,6 +268,7 @@ watch([keyword, activeCategory, sort], () => {
 @media (max-width: 640px) {
   .market-view {
     min-height: calc(100vh - 80px - 32px);
+    padding: 16px;
   }
 
   .market-view__heading,

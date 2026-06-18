@@ -174,11 +174,26 @@ watch(activeTab, loadDatasets)
 .content-product {
   position: relative;
   z-index: 2;
+  overflow: hidden;
   padding: 120px 15% 20px;
   text-align: center;
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 100% auto;
+}
+
+.content-product::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+}
+
+.content-product > * {
+  position: relative;
+  z-index: 1;
 }
 
 .content-product__title {
