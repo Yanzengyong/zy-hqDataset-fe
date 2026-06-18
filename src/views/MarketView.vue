@@ -305,6 +305,7 @@ watch([keyword, activeCategory, sort], () => {
 @media (max-width: 640px) {
   .market-view {
     min-height: calc(100vh - 80px - 32px);
+    padding: 16px;
   }
 
   .market-view__heading,
