@@ -114,23 +114,25 @@ watch([keyword, activeCategory, sort], () => {
           <span v-if="activeCategory !== 'all'">当前筛选：{{ activeCategory }}</span>
         </div>
 
-        <div v-if="loading" class="market-view__loading">
-          <LoadingState text="正在载入数据集..." />
-        </div>
+        <div class="market-view__body">
+          <div v-if="loading" class="market-view__loading">
+            <LoadingState text="正在载入数据集..." />
+          </div>
 
-        <EmptyState
-          v-else-if="!datasets.length"
-          title="暂无匹配数据集"
-          description="请调整关键词、目录筛选或排序条件后再试。"
-        />
-
-        <div v-else class="market-view__cards">
-          <DatasetCard
-            v-for="dataset in datasets"
-            :key="dataset.id"
-            :dataset="dataset"
-            @toggle-favorite="toggleDatasetFavorite"
+          <EmptyState
+            v-else-if="!datasets.length"
+            title="暂无匹配数据集"
+            description="请调整关键词、目录筛选或排序条件后再试。"
           />
+
+          <div v-else class="market-view__cards">
+            <DatasetCard
+              v-for="dataset in datasets"
+              :key="dataset.id"
+              :dataset="dataset"
+              @toggle-favorite="toggleDatasetFavorite"
+            />
+          </div>
         </div>
       </main>
     </div>
@@ -140,35 +142,11 @@ watch([keyword, activeCategory, sort], () => {
 <style scoped>
 .market-view {
   display: grid;
+  grid-template-rows: auto 1fr;
   gap: 18px;
-  box-sizing: border-box;
-  min-height: calc(100vh - 80px - 48px);
   height: calc(100vh - 80px);
-  padding: 24px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
-}
-
-.market-view::-webkit-scrollbar {
-  width: 6px;
-}
-
-.market-view::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.market-view::-webkit-scrollbar-thumb {
-  background-color: rgba(39, 92, 160, 0.3);
-  border-radius: 3px;
-}
-
-.market-view::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(39, 92, 160, 0.55);
-}
-
-.market-view::-webkit-scrollbar-thumb:active {
-  background-color: rgba(39, 92, 160, 0.75);
+  padding: 16px 24px 24px;
+  overflow: hidden;
 }
 
 .market-view__header {
@@ -215,21 +193,80 @@ watch([keyword, activeCategory, sort], () => {
   display: grid;
   grid-template-columns: 252px minmax(0, 1fr);
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
+  min-height: 0;
 }
 
 .market-view__sidebar {
-  position: sticky;
-  top: 16px;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.market-view__sidebar :deep(.filter-sidebar) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.market-view__sidebar :deep(.filter-sidebar__groups) {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
+}
+
+.market-view__sidebar :deep(.filter-sidebar__groups::-webkit-scrollbar) {
+  width: 6px;
+}
+
+.market-view__sidebar :deep(.filter-sidebar__groups::-webkit-scrollbar-thumb) {
+  background-color: rgba(39, 92, 160, 0.3);
+  border-radius: 3px;
 }
 
 .market-view__content {
   min-width: 0;
+  min-height: 0;
   padding: 18px;
   border: 1px solid var(--color-border);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.92);
   box-shadow: 0 12px 30px rgba(24, 36, 51, 0.05);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.market-view__list-meta {
+  flex: 0 0 auto;
+}
+
+.market-view__body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(39, 92, 160, 0.3) transparent;
+}
+
+.market-view__body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.market-view__body::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.market-view__body::-webkit-scrollbar-thumb {
+  background-color: rgba(39, 92, 160, 0.3);
+  border-radius: 3px;
+}
+
+.market-view__body::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(39, 92, 160, 0.55);
 }
 
 .market-view__list-meta {
