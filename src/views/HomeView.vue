@@ -15,6 +15,17 @@ const tabs = [
   { key: 'clinical', label: '诊疗数据集', bg: '/images/zyy-03.png' },
 ]
 
+const productImageSeries = {
+  herb: 30,
+  classic: 40,
+  clinical: 50
+}
+
+const getProductImageSrc = (index) => {
+  const startNo = productImageSeries[activeTab.value] ?? productImageSeries.herb
+  return `/images/list/item-${startNo + index}.png`
+}
+
 const activeTabBg = computed(() => {
   const tab = tabs.find(t => t.key === activeTab.value)
   return tab ? `url(${tab.bg})` : 'none'
@@ -32,8 +43,8 @@ const loadDatasets = async () => {
 const handleToggleFavorite = async (id) => {
   const updatedDataset = await toggleFavorite(id)
   if (!updatedDataset) return
-  
-  datasets.value = datasets.value.map(dataset => 
+
+  datasets.value = datasets.value.map(dataset =>
     dataset.id === id ? updatedDataset : dataset
   )
 }
@@ -44,16 +55,13 @@ watch(activeTab, loadDatasets)
 </script>
 
 <template>
-  <!-- <AnimatedBackground /> -->
   <div class="home-content page-scrollbar">
-
     <div class="header-box">
       <div class="header-title">
         <h3 class="title">中医药（苗药）数据集构建流程</h3>
         <p class="sub-title">赋能大模型的预训练、微调和评测</p>
       </div>
       <div class="content-wrapper">
-
         <div class="header-section">
           <img src="/images/index-00.png" alt="" class="welcome-video" />
         </div>
@@ -68,6 +76,7 @@ watch(activeTab, loadDatasets)
           :key="tab.key"
           class="content-product__tab"
           :class="{ 'is-active': activeTab === tab.key }"
+          type="button"
           @click="activeTab = tab.key"
         >
           {{ tab.label }}
@@ -75,30 +84,27 @@ watch(activeTab, loadDatasets)
       </div>
 
       <div class="content-product__panel">
-        
         <div v-if="loading" class="content-product__loading">
           <LoadingState text="正在载入数据集..." />
         </div>
-        
+
         <EmptyState
           v-else-if="!datasets.length"
           title="暂无数据集"
           description="该类别下暂无数据集，请切换其他类别查看。"
         />
-        
+
         <div v-else class="content-product__list">
           <DatasetGridCard
-            v-for="dataset in datasets"
+            v-for="(dataset, index) in datasets"
             :key="dataset.id"
             :dataset="dataset"
+            :image-src="getProductImageSrc(index)"
             @toggle-favorite="handleToggleFavorite"
           />
         </div>
-
       </div>
-
     </div>
-
   </div>
 </template>
 
