@@ -174,10 +174,10 @@ onUnmounted(() => {
     <header class="build-view__header">
       <div>
         <p class="build-view__eyebrow">高质量数据集构建流</p>
-        <h1 id="build-page-title" class="build-view__title">中医药数据治理全流程</h1>
+        <h1 id="build-page-title" class="build-view__title">中医药（苗药）高质量数据集构建全流程</h1>
       </div>
       <p class="build-view__summary">
-        从多源接入、采集清洗、专业标注到产品化交付，呈现可信、可追溯、可复用的数据集生产链路。
+        从多源接入、采集清洗、专业标注到产品化交付，呈现可信、可追溯、可复用的高质量数据集生产链路。
       </p>
     </header>
 
