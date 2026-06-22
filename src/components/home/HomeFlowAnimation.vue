@@ -80,10 +80,10 @@
 
 <script setup>
 const sourcePaths = [
-  { id: 'source-text', d: 'M 315 205 C 440 205, 480 315, 620 320', delay: '0s' },
-  { id: 'source-pdf', d: 'M 200 355 C 385 355, 470 390, 640 390', delay: '0.45s' },
-  { id: 'source-image', d: 'M 230 470 C 390 470, 485 445, 655 450', delay: '0.9s' },
-  { id: 'source-web', d: 'M 270 585 C 430 560, 515 520, 675 510', delay: '1.35s' },
+  { id: 'source-text', d: 'M 322 123 C 430 124, 470 300, 620 320', delay: '0s' },
+  { id: 'source-pdf', d: 'M 315 291 C 430 292, 480 374, 640 390', delay: '0.45s' },
+  { id: 'source-web', d: 'M 314 494 C 430 494, 500 454, 655 450', delay: '0.9s' },
+  { id: 'source-epub', d: 'M 520 545 C 585 540, 620 520, 675 510', delay: '1.35s' },
 ]
 
 const outputPaths = [
@@ -179,9 +179,9 @@ const nodes = [
 .home-flow__paths path {
   fill: none;
   stroke: rgba(31, 199, 190, 0.2);
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-linecap: round;
-  stroke-dasharray: 14 18;
+  stroke-dasharray: 8 12;
   animation: flow-line 4.6s linear infinite;
   animation-delay: var(--delay);
 }
