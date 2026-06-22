@@ -150,7 +150,7 @@ const downloadDataset = async () => {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: 224px minmax(0, 1fr);
+  grid-template-columns: 330px minmax(0, 1fr);
   align-self: start;
   gap: 22px;
   padding: 20px;
@@ -179,8 +179,9 @@ const downloadDataset = async () => {
 
 .dataset-summary__cover {
   position: relative;
-  width: 224px;
-  height: 224px;
+  width: 330px;
+  aspect-ratio: 1 / 0.68;
+  height: auto;
   min-height: 0;
   align-self: center;
   margin: 0;
@@ -375,15 +376,12 @@ const downloadDataset = async () => {
 
 @media (max-width: 760px) {
   .dataset-summary {
-    grid-template-columns: 190px minmax(0, 1fr);
+    grid-template-columns: 280px minmax(0, 1fr);
     padding: 18px;
   }
 
-  .dataset-summary__cover,
-  .dataset-summary__cover img {
-    width: 190px;
-    height: 190px;
-    min-height: 0;
+  .dataset-summary__cover {
+    width: 280px;
   }
 
   .dataset-summary__metrics {
