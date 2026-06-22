@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { getDatasetCover } from '../../utils/datasetCovers.js'
 
 const props = defineProps({
@@ -12,6 +13,8 @@ const props = defineProps({
     default: ''
   }
 })
+
+const router = useRouter()
 
 const imageLoadFailed = ref(false)
 
