@@ -83,7 +83,7 @@ const openDetail = () => {
 
       <div class="dataset-card__provider">
         <span>提供方</span>
-        <strong>{{ dataset.provider }}</strong>
+        <strong>贵州中医药大学</strong>
       </div>
     </div>
 

@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { Building2, Mail, ScrollText, ShieldCheck } from 'lucide-vue-next'
+import { Building2, ScrollText } from 'lucide-vue-next'
 
 const props = defineProps({
   dataset: {
@@ -12,19 +12,20 @@ const props = defineProps({
 const details = computed(() => [
   {
     label: '机构名称',
-    value: props.dataset.providerInfo?.name ?? props.dataset.provider,
+    value: '贵州中医药大学',
     icon: Building2,
   },
-  {
-    label: '联系方式',
-    value: props.dataset.providerInfo?.contact ?? '暂无联系方式',
-    icon: Mail,
-  },
-  {
-    label: '授权许可',
-    value: props.dataset.providerInfo?.license ?? '暂无许可说明',
-    icon: ShieldCheck,
-  },
+  // 暂时隐藏，后续需要时恢复 Mail、ShieldCheck 图标导入并取消注释。
+  // {
+  //   label: '联系方式',
+  //   value: props.dataset.providerInfo?.contact ?? '暂无联系方式',
+  //   icon: Mail,
+  // },
+  // {
+  //   label: '授权许可',
+  //   value: props.dataset.providerInfo?.license ?? '暂无许可说明',
+  //   icon: ShieldCheck,
+  // },
   {
     label: '领域方向',
     value: props.dataset.domain,

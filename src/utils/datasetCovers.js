@@ -106,7 +106,43 @@ const coverRules = [
   { keywords: ['慢性胃炎', '诊疗', '病案'], image: tcmCover12 },
 ]
 
+const homepageProductCovers = {
+  'herb-image-recognition': '/images/list/item-30.png',
+  'herb-decoction-piece-quality': '/images/list/item-31.png',
+  'herb-origin-trace-image': '/images/list/item-32.png',
+  'herb-microscopic-slice': '/images/list/item-33.png',
+  'herb-adulterant-detection': '/images/list/item-34.png',
+  'herb-processing-before-after': '/images/list/item-35.png',
+  'herb-spectral-fingerprint': '/images/list/item-36.png',
+  'herb-storage-risk': '/images/list/item-37.png',
+  'herb-seedling-growth': '/images/list/item-38.png',
+  'formula-syndrome-corpus': '/images/list/item-40.png',
+  'classic-famous-formula-mining': '/images/list/item-41.png',
+  'classic-ancient-case-corpus': '/images/list/item-42.png',
+  'classic-prescription-dose-normalization': '/images/list/item-43.png',
+  'classic-formula-contraindication': '/images/list/item-44.png',
+  'classic-treatise-qa': '/images/list/item-45.png',
+  'classic-formula-evolution': '/images/list/item-46.png',
+  'classic-herb-pair-corpus': '/images/list/item-47.png',
+  'classic-commentary-alignment': '/images/list/item-48.png',
+  'medical-case-qa': '/images/list/item-50.png',
+  'special-disease-followup': '/images/list/item-51.png',
+  'clinical-insomnia-followup': '/images/list/item-52.png',
+  'clinical-diabetes-rwd': '/images/list/item-53.png',
+  'clinical-chronic-gastritis': '/images/list/item-54.png',
+  'clinical-cardiovascular-case': '/images/list/item-55.png',
+  'clinical-pediatric-cough': '/images/list/item-56.png',
+  'clinical-rehab-stroke': '/images/list/item-57.png',
+  'clinical-gynecology-menstrual': '/images/list/item-58.png',
+}
+
 export const getDatasetCover = (dataset) => {
+  const homepageCover = homepageProductCovers[dataset?.id]
+
+  if (homepageCover) {
+    return homepageCover
+  }
+
   const text = [
     dataset?.name,
     dataset?.summary,

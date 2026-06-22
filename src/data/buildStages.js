@@ -1,7 +1,7 @@
 export const buildMetrics = [
   {
     label: '汇聚数据源',
-    value: '128',
+    value: '18',
     unit: '类',
     description: '覆盖古籍、临床、科研、图像与知识资产',
   },
@@ -19,7 +19,7 @@ export const buildMetrics = [
   },
   {
     label: '数据集产品',
-    value: '42',
+    value: '33',
     unit: '个',
     description: '面向训练、评测、检索与知识图谱应用',
   },

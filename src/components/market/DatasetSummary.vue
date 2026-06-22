@@ -95,7 +95,7 @@ const downloadDataset = async () => {
           <p class="dataset-summary__eyebrow">数据商品 · {{ dataset.category }} · {{ dataset.taskType }}</p>
           <h1 id="dataset-summary-title">{{ dataset.name }}</h1>
           <p class="dataset-summary__summary">{{ dataset.summary }}</p>
-          <p class="dataset-summary__provider">提供方：{{ dataset.provider }}</p>
+          <p class="dataset-summary__provider">提供方：贵州中医药大学</p>
         </div>
 
         <div class="dataset-summary__actions">
