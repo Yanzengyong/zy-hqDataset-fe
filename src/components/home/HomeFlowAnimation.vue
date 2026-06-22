@@ -87,10 +87,10 @@ const sourcePaths = [
 ]
 
 const outputPaths = [
-  { id: 'output-train', d: 'M 1335 300 C 1460 270, 1530 215, 1700 205', delay: '1.8s' },
-  { id: 'output-tune', d: 'M 1340 430 C 1515 420, 1590 380, 1785 380', delay: '2.15s' },
-  { id: 'output-eval', d: 'M 1330 475 C 1510 500, 1595 550, 1780 550', delay: '2.5s' },
-  { id: 'output-search', d: 'M 1320 565 C 1455 650, 1550 670, 1705 680', delay: '2.85s' },
+  { id: 'output-train', d: 'M 1430 300 C 1510 270, 1568 128, 1710 128', delay: '1.8s' },
+  { id: 'output-tune', d: 'M 1430 390 C 1570 390, 1648 303, 1874 303', delay: '2.15s' },
+  { id: 'output-eval', d: 'M 1430 392 C 1550 410, 1628 488, 1778 488', delay: '2.5s' },
+  { id: 'output-search', d: 'M 1430 424 C 1520 455, 1550 650, 1710 650', delay: '2.85s' },
 ]
 
 const flowPaths = [...sourcePaths, ...outputPaths]
