@@ -1,5 +1,6 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 import { getDatasetCover } from '../../utils/datasetCovers.js'
 
 const props = defineProps({
@@ -12,6 +13,19 @@ const props = defineProps({
     default: ''
   }
 })
+
+const router = useRouter()
+
+const detailTo = computed(() => ({
+  name: 'dataset-detail',
+  params: {
+    id: props.dataset.id,
+  },
+}))
+
+const openDetail = () => {
+  router.push(detailTo.value)
+}
 
 const imageLoadFailed = ref(false)
 
@@ -54,7 +68,7 @@ const resolvedImageSrc = computed(() =>
 </script>
 
 <template>
-  <div class="dataset-grid-card">
+  <div class="dataset-grid-card" @click="openDetail">
     <figure class="dataset-grid-card__cover">
       <img
         :src="resolvedImageSrc"
