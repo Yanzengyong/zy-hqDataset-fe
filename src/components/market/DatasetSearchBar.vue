@@ -53,9 +53,6 @@ onBeforeUnmount(() => {
       <span class="is-active">
         数据集列表
       </span>
-      <span>
-        数据集建设意向列表
-      </span>
     </div>
 
     <form class="dataset-search__row" @submit.prevent="$emit('search')">

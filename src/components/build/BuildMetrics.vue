@@ -1,5 +1,5 @@
 <script setup>
-import { Boxes, Database, ShieldCheck, Waypoints } from 'lucide-vue-next'
+import { Boxes, Database, Waypoints } from 'lucide-vue-next'
 
 defineProps({
   metrics: {
@@ -8,7 +8,7 @@ defineProps({
   },
 })
 
-const metricIcons = [Database, Waypoints, ShieldCheck, Boxes]
+const metricIcons = [Database, Waypoints, Boxes]
 </script>
 
 <template>
@@ -37,7 +37,7 @@ const metricIcons = [Database, Waypoints, ShieldCheck, Boxes]
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
 }
 

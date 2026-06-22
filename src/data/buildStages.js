@@ -12,12 +12,6 @@ export const buildMetrics = [
     description: '对齐中医病证、方剂、本草与功效术语',
   },
   {
-    label: '质量分级与专家质检',
-    value: '3级 / 5层',
-    unit: '',
-    description: '机器校验、交叉复核、专家终审全流程留痕',
-  },
-  {
     label: '数据集产品',
     value: '33',
     unit: '个',
