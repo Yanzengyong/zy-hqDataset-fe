@@ -211,6 +211,8 @@ onUnmounted(() => {
   --color-panel-subtle: #f3f8ee;
   --color-muted: #66766f;
   display: grid;
+  grid-auto-rows: max-content;
+  align-content: start;
   gap: 16px;
   min-height: calc(100vh - 80px);
   height: calc(100vh - 80px);

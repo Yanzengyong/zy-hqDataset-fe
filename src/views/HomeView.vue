@@ -6,6 +6,7 @@ import DatasetGridCard from '../components/market/DatasetGridCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
 import EmptyState from '../components/common/EmptyState.vue'
 import { getDatasetsByCategory } from '../services/mockApi.js'
+import { getDatasetCover } from '../utils/datasetCovers.js'
 import homeBackground from '../assets/home/tcm-home-bg.png'
 import marketCardImage from '../assets/market/tcm-market-card-bg.png'
 import marketHeroImage from '../assets/market/tcm-market-hero.png'
@@ -21,17 +22,6 @@ const tabs = [
   { key: 'classic', label: '古籍数据集', bg: homeBackground, icon: BookOpen },
   { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage, icon: Stethoscope },
 ]
-
-const productImageSeries = {
-  herb: 30,
-  classic: 40,
-  clinical: 50
-}
-
-const getProductImageSrc = (index) => {
-  const startNo = productImageSeries[activeTab.value] ?? productImageSeries.herb
-  return `${import.meta.env.BASE_URL}images/list/item-${startNo + index}.png`
-}
 
 const activeTabBg = computed(() => {
   const tab = tabs.find(t => t.key === activeTab.value)
@@ -109,10 +99,10 @@ watch(activeTab, loadDatasets)
 
         <div v-else class="content-product__list">
           <DatasetGridCard
-            v-for="(dataset, index) in datasets"
+            v-for="dataset in datasets"
             :key="dataset.id"
             :dataset="dataset"
-            :image-src="getProductImageSrc(index)"
+            :image-src="getDatasetCover(dataset)"
           />
         </div>
       </div>

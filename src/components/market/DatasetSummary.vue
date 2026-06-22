@@ -150,7 +150,8 @@ const downloadDataset = async () => {
   position: relative;
   isolation: isolate;
   display: grid;
-  grid-template-columns: minmax(230px, 28%) minmax(0, 1fr);
+  grid-template-columns: 224px minmax(0, 1fr);
+  align-self: start;
   gap: 22px;
   padding: 20px;
   overflow: hidden;
@@ -178,7 +179,10 @@ const downloadDataset = async () => {
 
 .dataset-summary__cover {
   position: relative;
-  min-height: 224px;
+  width: 224px;
+  height: 224px;
+  min-height: 0;
+  align-self: center;
   margin: 0;
   overflow: hidden;
   border: 1px solid rgba(31, 141, 122, 0.18);
@@ -191,7 +195,7 @@ const downloadDataset = async () => {
   display: block;
   width: 100%;
   height: 100%;
-  min-height: 224px;
+  min-height: 0;
   object-fit: cover;
 }
 
@@ -371,21 +375,15 @@ const downloadDataset = async () => {
 
 @media (max-width: 760px) {
   .dataset-summary {
-    grid-template-columns: 1fr;
+    grid-template-columns: 190px minmax(0, 1fr);
     padding: 18px;
   }
 
   .dataset-summary__cover,
   .dataset-summary__cover img {
-    min-height: 190px;
-  }
-
-  .dataset-summary__header {
-    grid-template-columns: 1fr;
-  }
-
-  .dataset-summary__actions {
-    justify-content: flex-start;
+    width: 190px;
+    height: 190px;
+    min-height: 0;
   }
 
   .dataset-summary__metrics {
