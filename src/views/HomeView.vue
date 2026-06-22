@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
-import { BookOpen, FileText, Leaf, Stethoscope } from 'lucide-vue-next'
+import { BookOpen, Leaf, Stethoscope } from 'lucide-vue-next'
 import HomeFlowAnimation from '../components/home/HomeFlowAnimation.vue'
 import DatasetGridCard from '../components/market/DatasetGridCard.vue'
 import LoadingState from '../components/common/LoadingState.vue'
@@ -15,16 +15,16 @@ const datasets = ref([])
 const loading = ref(true)
 
 const tabs = [
-  { key: 'herb', label: '药材数据集', bg: marketCardImage },
-  { key: 'classic', label: '古籍数据集', bg: homeBackground },
-  { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage },
+  { key: 'herb', label: '药材数据集', bg: marketCardImage, icon: Leaf },
+  { key: 'classic', label: '古籍数据集', bg: homeBackground, icon: BookOpen },
+  { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage, icon: Stethoscope },
 ]
 
 const heroSignals = [
   { label: '药材图谱', value: 'Herb Atlas', icon: Leaf },
   { label: '古籍文献', value: 'Classics Corpus', icon: BookOpen },
   { label: '诊疗知识', value: 'Clinical Data', icon: Stethoscope },
-  { label: '方剂处方', value: 'Prescription', icon: FileText },
+  // { label: '方剂处方', value: 'Prescription', icon: FileText },
 ]
 
 const productImageSeries = {
@@ -71,7 +71,7 @@ watch(activeTab, loadDatasets)
       </div>
       <div class="header-title">
         <p class="eyebrow">TCM DATA ENGINEERING PLATFORM</p>
-        <h1 class="title">中医药（苗药）高质量数据集构建平台</h1>
+        <h1 class="title">中医药（苗药）高质量数据集构建</h1>
         <p class="sub-title">汇聚药材图谱、古籍文献、诊疗知识与方剂处方，赋能大模型预训练、微调和评测</p>
         <div class="hero-signals" aria-label="核心数据类型">
           <div v-for="item in heroSignals" :key="item.label" class="hero-signal">
@@ -102,6 +102,7 @@ watch(activeTab, loadDatasets)
           type="button"
           @click="activeTab = tab.key"
         >
+          <component :is="tab.icon" :size="20" stroke-width="1.9" aria-hidden="true" />
           {{ tab.label }}
         </button>
       </div>
@@ -222,7 +223,7 @@ watch(activeTab, loadDatasets)
   }
 
   .sub-title {
-    width: min(780px, 100%);
+    width: 100%;
     margin: 18px auto 0;
     font-size: clamp(16px, 1.25vw, 22px);
     line-height: 1.7;
@@ -411,28 +412,40 @@ watch(activeTab, loadDatasets)
   }
 
   &__tab {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 58px;
     padding: 10px 24px;
-    border: 1px solid rgba(31, 141, 122, 0.18);
+    border: 1px solid rgba(31, 141, 122, 0.16);
     border-radius: 8px;
-    background: rgba(255, 253, 246, 0.62);
-    color: #66766f;
-    font-size: 20px;
+    background: rgba(255, 253, 246, 0.64);
+    box-shadow: 0 12px 30px rgba(23, 74, 61, 0.06);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #123c32;
+    font-size: 18px;
     font-weight: 500;
     cursor: pointer;
     transition: all 200ms ease;
 
     &:hover {
-      color: #173f36;
+      color: #0d7a66;
       border-color: rgba(31, 141, 122, 0.32);
       background: rgba(255, 253, 246, 0.84);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 40px rgba(23, 74, 61, 0.12);
     }
 
     &.is-active {
       color: #0d675d;
-      background: rgba(31, 141, 122, 0.12);
-      border-color: rgba(31, 141, 122, 0.35);
-      box-shadow: inset 0 0 0 1px rgba(31, 141, 122, 0.06);
+      background: rgba(31, 141, 122, 0.15);
+      border-color: rgba(31, 141, 122, 0.4);
+      box-shadow: 
+        inset 0 0 0 1px rgba(31, 141, 122, 0.06),
+        0 16px 40px rgba(23, 74, 61, 0.12);
       font-weight: 600;
+      transform: translateY(-2px);
     }
   }
 
