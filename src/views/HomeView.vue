@@ -20,13 +20,6 @@ const tabs = [
   { key: 'clinical', label: '诊疗数据集', bg: marketHeroImage, icon: Stethoscope },
 ]
 
-const heroSignals = [
-  { label: '药材图谱', value: 'Herb Atlas', icon: Leaf },
-  { label: '古籍文献', value: 'Classics Corpus', icon: BookOpen },
-  { label: '诊疗知识', value: 'Clinical Data', icon: Stethoscope },
-  // { label: '方剂处方', value: 'Prescription', icon: FileText },
-]
-
 const productImageSeries = {
   herb: 30,
   classic: 40,
@@ -64,24 +57,15 @@ watch(activeTab, loadDatasets)
   >
 
     <div class="header-box">
-      <div class="herb-line herb-line--left" aria-hidden="true"></div>
-      <div class="herb-line herb-line--right" aria-hidden="true"></div>
+      <!-- <div class="herb-line herb-line--left" aria-hidden="true"></div>
+      <div class="herb-line herb-line--right" aria-hidden="true"></div> -->
       <div class="data-meridian" aria-hidden="true">
         <span v-for="index in 18" :key="index"></span>
       </div>
       <div class="header-title">
-        <p class="eyebrow">TCM DATA ENGINEERING PLATFORM</p>
         <h1 class="title">中医药（苗药）高质量数据集构建</h1>
+        <p class="eyebrow">TCM DATA ENGINEERING PLATFORM</p>
         <p class="sub-title">汇聚药材图谱、古籍文献、诊疗知识与方剂处方，赋能大模型预训练、微调和评测</p>
-        <div class="hero-signals" aria-label="核心数据类型">
-          <div v-for="item in heroSignals" :key="item.label" class="hero-signal">
-            <component :is="item.icon" :size="20" stroke-width="1.9" aria-hidden="true" />
-            <span>
-              <strong>{{ item.label }}</strong>
-              <small>{{ item.value }}</small>
-            </span>
-          </div>
-        </div>
       </div>
       <div class="content-wrapper">
         <div class="header-section">
@@ -91,8 +75,8 @@ watch(activeTab, loadDatasets)
     </div>
 
     <div class="content-product" :style="{ backgroundImage: activeTabBg }">
-      <p class="content-product__eyebrow">精选中医药数据资产</p>
       <h2 class="content-product__title">数据集产品</h2>
+      <p class="content-product__eyebrow">精选中医药数据资产</p>
       <div class="content-product__tabs">
         <button
           v-for="tab in tabs"
@@ -231,53 +215,6 @@ watch(activeTab, loadDatasets)
   }
 }
 
-.hero-signals {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
-  width: min(920px, 100%);
-  margin: 30px auto 0;
-}
-
-.hero-signal {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  min-width: 0;
-  min-height: 58px;
-  padding: 10px 14px;
-  border: 1px solid rgba(31, 141, 122, 0.16);
-  border-radius: 8px;
-  color: #123c32;
-  background: rgba(255, 253, 246, 0.64);
-  box-shadow: 0 12px 30px rgba(23, 74, 61, 0.06);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-
-  svg {
-    flex: 0 0 auto;
-    color: #0d7a66;
-  }
-
-  span {
-    display: grid;
-    gap: 3px;
-    min-width: 0;
-    text-align: left;
-  }
-
-  strong {
-    font-size: 15px;
-    line-height: 1.2;
-  }
-
-  small {
-    color: #8b6b31;
-    font-size: 11px;
-    line-height: 1.2;
-  }
-}
-
 .herb-line {
   position: absolute;
   z-index: 0;
@@ -390,7 +327,7 @@ watch(activeTab, loadDatasets)
   }
 
   &__eyebrow {
-    margin: 0 0 10px;
+    margin: 0 0 30px;
     color: #946b20;
     font-size: 13px;
     font-weight: 800;
@@ -398,7 +335,7 @@ watch(activeTab, loadDatasets)
   }
 
   &__title {
-    margin: 0 0 34px;
+    margin: 0 0 4px;
     font-size: clamp(30px, 2.5vw, 42px);
     font-weight: 700;
     color: #173f36;
@@ -525,15 +462,6 @@ watch(activeTab, loadDatasets)
 
   .hero-signals {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .hero-signal {
-    min-height: 54px;
-    padding: 9px 10px;
-
-    strong {
-      font-size: 14px;
-    }
   }
 
   .header-section {
