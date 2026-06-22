@@ -51,10 +51,16 @@ const datasetCover = computed(() => getDatasetCover(props.dataset))
 const resolvedImageSrc = computed(() =>
   !imageLoadFailed.value && cardImageSrc.value ? cardImageSrc.value : datasetCover.value,
 )
+const detailTo = computed(() => ({
+  name: 'dataset-detail',
+  params: {
+    id: props.dataset.id,
+  },
+}))
 </script>
 
 <template>
-  <div class="dataset-grid-card">
+  <RouterLink class="dataset-grid-card" :to="detailTo">
     <figure class="dataset-grid-card__cover">
       <img
         :src="resolvedImageSrc"
@@ -105,11 +111,14 @@ const resolvedImageSrc = computed(() =>
       </div>
       <span class="dataset-grid-card__date">{{ formattedDate }}</span>
     </div>
-  </div>
+  </RouterLink>
 </template>
 
 <style lang="scss" scoped>
 .dataset-grid-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
   background:
     linear-gradient(135deg, rgba(31, 141, 122, 0.1), rgba(255, 253, 246, 0.92) 48%, rgba(247, 251, 239, 0.96)),
     #fffdf6;

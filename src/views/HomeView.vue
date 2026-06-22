@@ -8,6 +8,8 @@ import homeBackground from '../assets/home/tcm-home-bg.png'
 import marketCardImage from '../assets/market/tcm-market-card-bg.png'
 import marketHeroImage from '../assets/market/tcm-market-hero.png'
 
+const homeFlowImage = `${import.meta.env.BASE_URL}images/index-00.png`
+
 const activeTab = ref('herb')
 const datasets = ref([])
 const loading = ref(true)
@@ -26,7 +28,7 @@ const productImageSeries = {
 
 const getProductImageSrc = (index) => {
   const startNo = productImageSeries[activeTab.value] ?? productImageSeries.herb
-  return `/images/list/item-${startNo + index}.png`
+  return `${import.meta.env.BASE_URL}images/list/item-${startNo + index}.png`
 }
 
 const activeTabBg = computed(() => {
@@ -37,7 +39,10 @@ const activeTabBg = computed(() => {
 const loadDatasets = async () => {
   loading.value = true
   try {
-    datasets.value = await getDatasetsByCategory(activeTab.value, 9)
+    const categoryDatasets = await getDatasetsByCategory(activeTab.value, 9)
+    datasets.value = categoryDatasets.sort(
+      (first, second) => new Date(second.updatedAt) - new Date(first.updatedAt),
+    )
   } finally {
     loading.value = false
   }
@@ -62,7 +67,7 @@ watch(activeTab, loadDatasets)
       </div>
       <div class="content-wrapper">
         <div class="header-section">
-          <img src="/images/index-00.png" alt="" class="welcome-video" />
+          <img :src="homeFlowImage" alt="" class="welcome-video" />
         </div>
       </div>
     </div>

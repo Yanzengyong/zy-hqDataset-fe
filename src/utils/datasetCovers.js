@@ -140,7 +140,7 @@ export const getDatasetCover = (dataset) => {
   const homepageCover = homepageProductCovers[dataset?.id]
 
   if (homepageCover) {
-    return homepageCover
+    return `${import.meta.env.BASE_URL}${homepageCover.slice(1)}`
   }
 
   const text = [
